@@ -49,8 +49,8 @@ mongoose.Promise = global.Promise;
 // endpoints
 // ---------
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/views/index.html');
+app.get('/', (request, response) => {
+  response.sendFile(__dirname + '/views/index.html');
 });
 
 let authenticator = passport.authenticate('basic', {session: false});
