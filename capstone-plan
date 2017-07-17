@@ -1,5 +1,5 @@
-try making it nodemon in package.json
 use router
+how to seed db properly
 
 "Music Club"
 
@@ -97,5 +97,3 @@ mon - CI
 tues/wed - core features, testing
 thurs - code review
 thurs aft/fri morning - prep for demo, polish, documentation
-
-how to seed db properly
