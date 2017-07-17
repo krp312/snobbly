@@ -28,7 +28,11 @@ function seedUserData() {
 // if doing 2 promises, make sure to use promise.all, return it
 
 describe('album discusser API', function() {
-  it('should return true', function() {
-    true === true;
+  it('calling the root of the server should give a 200', function() {
+    return chai.request(app)
+      .get('/')
+      .then(res => {
+        res.should.have.status(200);
+      });
   });
 });

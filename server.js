@@ -20,37 +20,12 @@ app.use(bodyParser.json());
 
 mongoose.Promise = global.Promise;
 
-// const basicStrategy = new BasicStrategy((username, password, callback) => {
-//   let validatedUser;
-//   User
-//     .findOne({username})
-//     .then(function(user) {
-//       validatedUser = user;
-//       if (!user) {
-//         return callback(null, false);
-//       }
-
-//       return user.validatePassword(password);
-//     })
-//     .then(function(passwordToBeTested) {
-//       if (passwordToBeTested === false) {
-//         return callback(null, false);
-//       }
-
-//       return callback(null, validatedUser);
-//     })
-//     .catch(error => callback(error));
-// });
-
-// passport.use(basicStrategy);
-// app.use(passport.initialize());
-
 // ---------
 // endpoints
 // ---------
 
-app.get('/', (request, response) => {
-  response.sendFile(__dirname + '/views/index.html');
+app.get('/', (req, res) => {
+  res.status(200).sendFile(__dirname + '/views/index.html');
 });
 
 let authenticator = passport.authenticate('basic', {session: false});
