@@ -1,14 +1,35 @@
 <!DOCTYPE html>
+<html lang="en">
   <head>
+    <title>HOWTO: static assets</title>
+    <meta name="description" content="How to serve static assets with Express, by Thinkful">
+    <link id="favicon" rel="icon" href="//tf-assets-prod.s3.amazonaws.com/splash/logo/favicon.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>testing</title>
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/index.css">
   </head>
   <body>
-    <h1>testing</h1>
+    <header role="banner">
+      <h1>Serving static assets with Express</h1>
+    </header>
+
+    <main role="main">
+      <p>This index.html page was sent over when we made a GET request to the root for this server.
+      </p>
+      <p>In the head, we link to <code>/style.css</code>, which is stored on our server at <code>public/style.css</code>. Notice how we don't have to include `public` in the URL. Express just knows how to properly route this request, because we've enabled the public folder.</p>
+      <p>Below, we also link to <code>/client.js</code>, which is also located in the public folder of our server.</p>
+    </main>
+
+    
+
+    <script src="//code.jquery.com/jquery-2.2.1.min.js"
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+            crossorigin="anonymous"></script>
+    <script src="/index.js"></script>
+
   </body>
 </html>
+
 
 <!-- only need to use file names when referring to js and css files because of how express is set up -->
