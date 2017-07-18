@@ -45,6 +45,7 @@ as an admin i'd like to
 -----------------------------
 technical goals, among others
 -----------------------------
+anything that you get from an api should go through a state object!
 dev and prod dbs
 use router
 how to seed db properly

@@ -3,6 +3,7 @@ h1 {
   color: red;
 }
 
-.js-genre-selector {
-  width: 300px;
+#js-genre-selector, #js-album-searcher {
+  width: 400px;
 }
+

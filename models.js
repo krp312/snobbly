@@ -23,7 +23,7 @@ const albumSchema = mongoose.Schema(
     name:   { type: String, required: true },
     artist: { type: String, required: true },
     year:   { type: Number, required: true },
-    tags: tagSchemaGenerator(),
+    tags: [],
     ratings: {
       'one':   { type: Number, default: 0 },
       'two':   { type: Number, default: 0 },
