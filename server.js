@@ -25,7 +25,7 @@ mongoose.Promise = global.Promise;
 // ---------
 
 app.get('/', (req, res) => {
-  res.status(200).sendFile(__dirname + '/views/index.html');
+  res.status(201).sendFile(__dirname + '/views/index.html');
 });
 
 let authenticator = passport.authenticate('basic', {session: false});
@@ -59,10 +59,10 @@ let authenticator = passport.authenticate('basic', {session: false});
 //   res.status(404).json({message: 'Not Found'});
 // });
 
-
 let server;
 
 function runServer(databaseUrl=DATABASE_URL, port=PORT) {
+  console.log('inside runserver');
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, err => {
       if (err) {
@@ -95,6 +95,7 @@ function closeServer() {
 }
 
 if (require.main === module) {
+  console.log('am i being hit???');
   runServer().catch(err => console.error(err));
 }
 

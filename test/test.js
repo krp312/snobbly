@@ -32,7 +32,7 @@ describe('album discusser API', function() {
     return chai.request(app)
       .get('/')
       .then(res => {
-        res.should.have.status(200);
+        res.should.have.status(200); 
       });
   });
 });
