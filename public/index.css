@@ -2,3 +2,7 @@ h1 {
   font-weight: bold;
   color: red;
 }
+
+.js-genre-selector {
+  width: 300px;
+}

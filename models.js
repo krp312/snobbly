@@ -3,9 +3,37 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const albumSchema = mongoose.Schema({
-  // properties
+const genres = ['billyrock', 'cock rock', 'country pop'];
+
+const genreSchema = mongoose.Schema({
+  name: { type: String, required: true }
 });
+
+const tagSchemaGenerator = () => {
+  const tags = {};
+  genres.forEach((genre) => {
+    tags[genre] = { type: Number, default: 0 };
+  });
+
+  return tags;
+};
+
+const albumSchema = mongoose.Schema(
+  {
+    name:   { type: String, required: true },
+    artist: { type: String, required: true },
+    year:   { type: Number, required: true },
+    tags: tagSchemaGenerator(),
+    ratings: {
+      'one':   { type: Number, default: 0 },
+      'two':   { type: Number, default: 0 },
+      'three': { type: Number, default: 0 },
+      'four':  { type: Number, default: 0 },
+      'five':  { type: Number, default: 0 }
+    }
+  },
+  { timestamps: true }
+);
 
 const userSchema = mongoose.Schema(
   // properties
@@ -43,5 +71,6 @@ const userSchema = mongoose.Schema(
 
 const Album = mongoose.model('Album', albumSchema);
 const User = mongoose.model('User', userSchema);
+const Genre = mongoose.model('Genre', genreSchema);
 
-module.exports = { Album, User };
+module.exports = { Album, User, Genre };

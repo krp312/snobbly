@@ -7,9 +7,8 @@ const morgan = require('morgan');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const { BasicStrategy } = require('passport-http');
-
 const { DATABASE_URL, PORT } = require('./config');
-const { Album, User } = require('./models');
+const { Album, User, Genre } = require('./models');
 
 const app = express();
 
@@ -18,6 +17,12 @@ app.use(express.static('public'));
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 mongoose.Promise = global.Promise;
 
 // ---------
@@ -25,39 +30,28 @@ mongoose.Promise = global.Promise;
 // ---------
 
 app.get('/', (req, res) => {
-  res.status(201).sendFile(__dirname + '/views/index.html');
+  res.status(200).sendFile(__dirname + '/views/index.html');
+});
+
+app.post('/albums', (req, res) => {
+  Album
+    .create(req.body)
+    .then(result => res.send(result));
+});
+
+app.get('/genres', (req, res) => {
+  if (!(req.query.q)) {
+    Genre
+      .find()
+      .then(result => res.json(result));
+  } else {
+    Genre
+      .find( { name: { $regex : '.*' + req.query.q + '.*' } } )
+      .then(result => res.send(result));
+  }
 });
 
 let authenticator = passport.authenticate('basic', {session: false});
-
-// post needs required fields
-// don't forget error handling
-// 500 for everything
-// 400 for missing fields
-// req.user is the authenticated user data
-// .find({username: req.body.username})
-// 201 for successful post
-// .findByIdAndRemove(req.params.id)
-// 204 for delete
-// put, 201 if successful
-// if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-//   res.status(400).json({
-//     error: 'Request path id and request body id values must match'
-// });
-// const updated = {};
-// const updateableFields = ['title', 'content', 'author'];
-// updateableFields.forEach(field => {
-//   if (field in req.body) {
-//     updated[field] = req.body[field];
-//   }
-// });
-// .findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
-// .findByIdAndRemove(req.params.id)
-// 204 success delete
-
-// app.use('*', function(req, res) {
-//   res.status(404).json({message: 'Not Found'});
-// });
 
 let server;
 
