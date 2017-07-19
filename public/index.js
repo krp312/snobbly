@@ -17,10 +17,6 @@ function getAlbumInfo() {
     .then(res => console.log(res));
 }
 
-
-
-
-
 function genreSelector() {
   $('#js-genre-selector').select2({
     ajax: {
@@ -100,7 +96,7 @@ function installSearchButtonListener() {
         name: name.trim()
       },
       success: function(data) {
-        data = data[0];
+        data = data[0] || data;
         console.log(data);
         // $('#js-album-header').html(data.artist + ' ' + data.name);
         // $('#js-album-tags').html(data.tags);
