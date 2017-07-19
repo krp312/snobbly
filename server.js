@@ -29,18 +29,15 @@ mongoose.Promise = global.Promise;
 // endpoints
 // ---------
 
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
   res.status(200).sendFile(__dirname + '/views/index.html');
-  next();
 });
 
-app.get('/albums/', (req, res, next) => {
+app.get('/albums/', (req, res) => {
   Album.find().count()
     .then(result => {
       res.send(result);
     });
-
-  next();
   // if the album exists, return it
   // if the album doesn't exist, create it
 
@@ -80,15 +77,13 @@ app.get('/albums/', (req, res, next) => {
 //     });
 // });
 
-app.post('/albums', (req, res, next) => {
+app.post('/albums', (req, res) => {
   Album
     .create(req.body)
     .then(result => res.json(result));
-
-  next();
 });
 
-app.get('/genres', (req, res, next) => {
+app.get('/genres', (req, res) => {
   if (!(req.query.q)) {
     Genre
       .find()
@@ -98,8 +93,6 @@ app.get('/genres', (req, res, next) => {
       .find( { name: { $regex : '.*' + req.query.q + '.*' } } )
       .then(result => res.json(result));
   }
-
-  next();
 });
 
 let authenticator = passport.authenticate('basic', {session: false});
