@@ -1,13 +1,17 @@
 ----------------------
 user stories and flows
 ----------------------
-as a user i'd like to
-  tag/comment/rate albums
+DONE:
     tagging albums
       1. user goes to album page. if album page isn't there, create one
       3. user clicks a tag from available list
       4. tag updates +1, max 1 vote per tag
       5. vote value updates in dom
+
+as a user i'd like to
+  have my own account
+    1. enter in credentials
+    2. create new user in users collection with hashed password
     rating albums
       1. user goes to album page. if album page isn't there, create one
       2. user clicks a rating from a list of 1 to 5
@@ -28,10 +32,6 @@ as a user i'd like to
     from album view
       1. login
       2. look at all the comments (which should be displayed by username). grab the comment by searching the users collection by date created?
-  have my own account
-    1. enter in credentials
-    2. create new user in users collection with hashed password
-
 as an admin i'd like to
   edit album properties
     1. login
@@ -42,9 +42,15 @@ as an admin i'd like to
     2. see users
     3. delete
 
+
 -----------------------------
 technical goals, among others
 -----------------------------
+- Briefly show the wireframes and user stories (so Joe has context)
+- Demo basic CRUD features using client app (or Postman)
+- Show working set of Integration Tests. At least 1 test per endpoint
+
+for every feature -- tests, auth, front end, online
 try fetch api
 state management front end
 dev and prod dbs
@@ -59,7 +65,6 @@ error handling!
 .populate?
 .save on actual document, not instance
 search and sort
-how auth is going match?
 
 ------------
 daily pacing

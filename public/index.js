@@ -8,15 +8,6 @@ const state = {
   tags: []
 };
 
-function getAlbumInfo() {
-  // imagine grabbing the necessary info with query params
-  // query my db
-  //  if the album is there, grab it
-  //  otherwise, add it to the db
-  fetch('http://localhost:8080/albums/')
-    .then(res => console.log(res));
-}
-
 function genreSelector() {
   $('#js-genre-selector').select2({
     ajax: {
@@ -56,8 +47,7 @@ function genreSelector() {
       success: function(data) {
         $('#js-album-search-button').trigger('click');
       }
-    });    
-
+    });
   });
 }
 
@@ -97,7 +87,6 @@ function installSearchButtonListener() {
       },
       success: function(data) {
         data = data[0] || data;
-        console.log(data);
         // $('#js-album-header').html(data.artist + ' ' + data.name);
         // $('#js-album-tags').html(data.tags);
         // $('#js-album-rating').html(data.ratings);

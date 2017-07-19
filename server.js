@@ -30,6 +30,8 @@ mongoose.Promise = global.Promise;
 // endpoints
 // ---------
 
+let validGenres = [];
+
 app.get('/', (req, res) => {
   res.status(200).sendFile(__dirname + '/views/index.html');
 });
@@ -58,8 +60,14 @@ app.get('/albums/', (req, res) => {
     .catch(err => res.status(500).send(err.stack));
 });
 
-// 596d810b3f4fca2fe21c79ae
+// 596f06f6a8697cc121e07366
+// lorde pure heroine
 app.put('/albums/:id/tags', (req, res) => {
+  // to prevent someone from adding a tag that doesn't belong
+  if (!(req.body.tag in validGenres)) {
+    return res.status(500).json('sneaky sneaky');
+  }
+
   Album
     .findByIdAndUpdate({
       _id: req.params.id
@@ -69,39 +77,11 @@ app.put('/albums/:id/tags', (req, res) => {
         tags: req.body.tag
       }
     })
-    .then(result => {
+    .then(() => {
       return Album.findById(req.params.id);
-    }) // sends not-updated version
-    .then(result => res.send(result)); // this does though
+    })
+    .then(result => res.send(result));  // to send back updated version
 });
-
-// app.post('/users', (req, res) => {
-//   User
-//     .find({username: req.body.username})
-//     .count()   // count is always 1
-//     .then(count => {
-//       if (count > 0) {
-//         console.error('There\'s already a user with that username');
-//         return res.status(400);
-//       }
-//       return User.hashPassword(req.body.password);   // where does this stuff save?
-//     })
-//     .then(password => {
-//       return User
-//         .create({
-//           username: req.body.username,
-//           password: password,
-//           firstName: req.body.firstName,
-//           lastName: req.body.lastName
-//         });
-//     })
-//     .then(user => {
-//       return res.status(201).send(user.apiRepr());
-//     })
-//     .catch(err => {
-//       res.status(500).json({message: 'Error!'});
-//     });
-// });
 
 app.post('/albums', (req, res) => {
   Album
@@ -109,15 +89,23 @@ app.post('/albums', (req, res) => {
     .then(result => res.json(result));
 });
 
+// return all genres if there isn't a query string
+// if there is a query string, return all matching genres
 app.get('/genres', (req, res) => {
   if (!(req.query.q)) {
     Genre
       .find()
-      .then(result => res.json(result));
+      .then(result => {
+        validGenres = result;
+        res.json(result);
+      });
   } else {
     Genre
       .find( { name: { $regex : '.*' + req.query.q + '.*' } } )
-      .then(result => res.json(result));
+      .then(result => {
+        validGenres = result;
+        res.json(result);
+      });
   }
 });
 
