@@ -61,7 +61,6 @@ function albumSearcher() {
           artist: request.term
         },
         success: function( data ) {
-          console.log(data)
           result = data.topalbums.album.map(function(object) {
             return `artist: ${object.artist.name}, album: ${object.name}`;
           });

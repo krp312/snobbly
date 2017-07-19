@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
   next();
 });
 
@@ -30,8 +31,10 @@ mongoose.Promise = global.Promise;
 // endpoints
 // ---------
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
   res.status(200).sendFile(__dirname + '/views/index.html');
+
+  next();
 });
 
 app.get('/albums/', (req, res) => {
