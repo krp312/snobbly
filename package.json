@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "mocha",
+    "debug": "node --nolazy --debug-brk=5858 server.js",
     "start": "node server.js"
   },
   "repository": {

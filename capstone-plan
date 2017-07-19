@@ -45,6 +45,7 @@ as an admin i'd like to
 -----------------------------
 technical goals, among others
 -----------------------------
+try fetch api
 state management front end
 dev and prod dbs
 use router
@@ -97,6 +98,8 @@ data model
   }
 }
 
+user
+----
 {
   username:
   password:

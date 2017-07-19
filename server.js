@@ -34,19 +34,44 @@ app.get('/', (req, res) => {
 });
 
 app.get('/albums/', (req, res) => {
-  Album.find().count()
-    .then(result => {
-      res.send(result);
-    });
-  // if the album exists, return it
-  // if the album doesn't exist, create it
+  const newAlbum = {
+    artist: req.query.artist,
+    name: req.query.name
+  };
 
-  // res.send(req.query.artist);
-  // res.send(req.query.name);
-  // const newAlbum = {
-  //   name: req.query.artist,
-  //   album: req.query.name
-  // };
+  Album
+    .find( { name: req.query.name } )
+    .count()
+    .then(count => {
+      if (count > 0) {
+        return Album.find( { name: req.query.name } ).then(result => res.send(result));
+      } 
+      else {
+        return Album
+          .create(newAlbum)
+          .then(result => {
+            res.status(201).json(result);
+          });
+      }
+    })
+    .catch(err => res.status(500).send(err.stack));
+});
+
+// 596d810b3f4fca2fe21c79ae
+app.put('/albums/:id/tags', (req, res) => {
+  Album
+    .findByIdAndUpdate({
+      _id: req.params.id
+    }, 
+    {
+      $push: {
+        tags: req.body.tag
+      }
+    })
+    .then(result => {
+      return Album.findById(req.params.id);
+    }) // sends not-updated version
+    .then(result => res.send(result)); // this does though
 });
 
 // app.post('/users', (req, res) => {

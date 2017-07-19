@@ -27,7 +27,8 @@ const albumSchema = mongoose.Schema(
       'three': { type: Number, default: 0 },
       'four':  { type: Number, default: 0 },
       'five':  { type: Number, default: 0 }
-    }
+    },
+    comments: []
   },
   { timestamps: true }
 );

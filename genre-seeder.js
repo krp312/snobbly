@@ -34,3 +34,26 @@ var data = [
     ]
   }
 ];
+
+// Album.create({
+//   artist: 'Lorde',
+//   name: 'Pure Heroine',
+//   tags: ['art rock', 'electropop'],
+//   ratings: {
+//     'one':   25,
+//     'two':   5,
+//     'three': 3,
+//     'four':  2,
+//     'five':  26
+//   },
+//   comments: [
+//     {
+//       'username' : 'brtny4lyf',
+//       'content' : 'just leave her alone'
+//     },
+//     {
+//       'username' : 'juggalos_icp',
+//       'content' : 'magnetism how does it work'
+//     }
+//   ]
+// });

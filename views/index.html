@@ -24,15 +24,18 @@
       <label for="js-album-searcher">find albums by artist</label>
       <div>
         <input id="js-album-searcher">
+        <button id='js-album-search-button'>search</button>
       </div>
     </div>
 
     <div id='js-album-view'>
       <div id='js-album-header'></div>
-      <div id='js-album-tags'>
+      <input type='hidden' id='js-album-id'></input>
+      <div id='js-album-tags'></div>
+      <div>
         <select id="js-genre-selector">
           <option>type in a tag</option>
-        </select>        
+        </select>  
       </div>
       <div id='js-album-rating'></div>
       <div id='js-album-comments'></div>
