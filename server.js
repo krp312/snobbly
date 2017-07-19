@@ -33,10 +33,54 @@ app.get('/', (req, res) => {
   res.status(200).sendFile(__dirname + '/views/index.html');
 });
 
+app.get('/albums/', (req, res) => {
+  Album.find().count()
+    .then(result => {
+      res.send(result);
+    });
+  // if the album exists, return it
+  // if the album doesn't exist, create it
+
+  // res.send(req.query.artist);
+  // res.send(req.query.name);
+  // const newAlbum = {
+  //   name: req.query.artist,
+  //   album: req.query.name
+  // };
+});
+
+// app.post('/users', (req, res) => {
+//   User
+//     .find({username: req.body.username})
+//     .count()   // count is always 1
+//     .then(count => {
+//       if (count > 0) {
+//         console.error('There\'s already a user with that username');
+//         return res.status(400);
+//       }
+//       return User.hashPassword(req.body.password);   // where does this stuff save?
+//     })
+//     .then(password => {
+//       return User
+//         .create({
+//           username: req.body.username,
+//           password: password,
+//           firstName: req.body.firstName,
+//           lastName: req.body.lastName
+//         });
+//     })
+//     .then(user => {
+//       return res.status(201).send(user.apiRepr());
+//     })
+//     .catch(err => {
+//       res.status(500).json({message: 'Error!'});
+//     });
+// });
+
 app.post('/albums', (req, res) => {
   Album
     .create(req.body)
-    .then(result => res.send(result));
+    .then(result => res.json(result));
 });
 
 app.get('/genres', (req, res) => {
@@ -47,7 +91,7 @@ app.get('/genres', (req, res) => {
   } else {
     Genre
       .find( { name: { $regex : '.*' + req.query.q + '.*' } } )
-      .then(result => res.send(result));
+      .then(result => res.json(result));
   }
 });
 

@@ -3,8 +3,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const genres = ['billyrock', 'cock rock', 'country pop'];
-
 const genreSchema = mongoose.Schema({
   name: { type: String, required: true }
 });
@@ -22,7 +20,6 @@ const albumSchema = mongoose.Schema(
   {
     name:   { type: String, required: true },
     artist: { type: String, required: true },
-    year:   { type: Number, required: true },
     tags: [],
     ratings: {
       'one':   { type: Number, default: 0 },

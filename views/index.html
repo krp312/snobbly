@@ -10,25 +10,32 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="../dist/js/select2.min.js"></script>
     <link href="../dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../public/index.css">
-    <link rel="stylesheet" href="../public/jquery-ui.structure.css">
-    <link rel="stylesheet" href="../public/jquery-ui.theme.css">
-    <link rel="stylesheet" href="../public/jquery-ui.css">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="jquery-ui.structure.css">
+    <link rel="stylesheet" href="jquery-ui.theme.css">
+    <link rel="stylesheet" href="jquery-ui.css">
   </head>
   <body>
     <header role="banner">
       <h1>TEST TEST TRUMP MARINA ICE CREAM CONE</h1>
     </header>
 
-    <select id="js-genre-selector">
-      <option value="3620194" selected="selected">please select a tag</option>
-    </select>
-
     <div>
       <label for="js-album-searcher">find albums by artist</label>
       <div>
         <input id="js-album-searcher">
-        </div>
+      </div>
+    </div>
+
+    <div id='js-album-view'>
+      <div id='js-album-header'></div>
+      <div id='js-album-tags'>
+        <select id="js-genre-selector">
+          <option>type in a tag</option>
+        </select>        
+      </div>
+      <div id='js-album-rating'></div>
+      <div id='js-album-comments'></div>
     </div>
 
     <script src="../public/index.js"></script>

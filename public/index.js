@@ -1,5 +1,26 @@
 'use strict';
 
+// ------------
+// state object
+// ------------
+
+const state = {
+  tags: []
+};
+
+function getAlbumInfo() {
+  // imagine grabbing the necessary info with query params
+  // query my db
+  //  if the album is there, grab it
+  //  otherwise, add it to the db
+  fetch('http://localhost:8080/albums/')
+    .then(res => console.log(res));
+}
+
+
+
+
+
 function genreSelector() {
   $('#js-genre-selector').select2({
     ajax: {
@@ -11,8 +32,8 @@ function genreSelector() {
           q: params.term, 
         };
       },
-      processResults: function (data, params) {
-        const namesArr = data.map(function(object, index) {
+      processResults: function (data) {
+        const namesArr = data.map(function(object) {
           return { id: object._id, text: object.name };
         });
         return {
@@ -26,7 +47,6 @@ function genreSelector() {
 
   $('#js-genre-selector').on('select2:select', function(event) {
     const selection = event.params.data.text;
-
   });
 }
 
@@ -41,10 +61,10 @@ function albumSearcher() {
           artist: request.term
         },
         success: function( data ) {
+          console.log(data)
           result = data.topalbums.album.map(function(object) {
-            return `${object.artist.name}, ${object.name}`;
+            return `artist: ${object.artist.name}, album: ${object.name}`;
           });
-
           response(result);
         }
       });
