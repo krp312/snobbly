@@ -13,6 +13,7 @@ const { Album, User, Genre } = require('./models');
 const app = express();
 
 app.use(express.static('public'));
+app.use(express.static('dist'));
 
 app.use(morgan('common'));
 app.use(bodyParser.json());
