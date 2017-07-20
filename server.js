@@ -17,7 +17,7 @@ app.use(express.static('dist'));
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Methods', 'PUT, GET, OPTIONS');
@@ -25,6 +25,33 @@ app.use(function(req, res, next) {
 });
 
 mongoose.Promise = global.Promise;
+
+const basicStrategy = new BasicStrategy((username, password, callback) => {
+  let validatedUser;
+  User
+    .findOne({username})
+    .then(function(user) {
+      validatedUser = user;
+      if (!user) {
+        return callback(null, false);
+      }
+
+      return user.validatePassword(password);
+    })
+    .then(function(passwordToBeTested) {
+      if (passwordToBeTested === false) {
+        return callback(null, false);
+      }
+
+      return callback(null, validatedUser);
+    })
+    .catch(error => callback(error));
+});
+
+passport.use(basicStrategy);
+app.use(passport.initialize());
+
+let authenticator = passport.authenticate('basic', { session: false });
 
 // ---------
 // endpoints
@@ -43,16 +70,20 @@ app.get('/albums/', (req, res) => {
   };
 
   Album
-    .find( { name: req.query.name } )
+    .find({ name: req.query.name })
     .count()
     .then(count => {
       if (count > 0) {
-        return Album.find( { name: req.query.name } ).then(result => res.send(result));
-      } 
+        return Album
+          .find({ name: req.query.name })
+          .then(result => {
+            res.json(result);  // returns an array with 1 album object in it
+          });
+      }
       else {
         return Album
           .create(newAlbum)
-          .then(result => {
+          .then(result => {   // returns the album object here
             res.status(201).json(result);
           });
       }
@@ -63,30 +94,29 @@ app.get('/albums/', (req, res) => {
 // 596f06f6a8697cc121e07366
 // lorde pure heroine
 app.put('/albums/:id/tags', (req, res) => {
-  // to prevent someone from adding a tag that doesn't belong
-  if (!(req.body.tag in validGenres)) {
-    return res.status(500).json('sneaky sneaky');
-  }
-
-  Album
-    .findByIdAndUpdate({
-      _id: req.params.id
-    }, 
-    {
-      $push: {
-        tags: req.body.tag
+  Genre
+    .find( { name: req.body.tag } )
+    .count()
+    .then(count => {
+      if (count === 1) {
+        Album
+          .findById(req.params.id)
+          .then(album => {
+            if ( album.tags.indexOf(req.body.tag) > -1 ) {
+              return res.status(500).send('error');
+            }
+            Album
+              .findByIdAndUpdate( { _id: req.params.id }, { $push: { tags: req.body.tag } } )
+              .then(() => {
+                return Album.findById(req.params.id);
+              })
+              .then(result => res.status(201).json(result)); // to send back updated version        
+          });
       }
     })
-    .then(() => {
-      return Album.findById(req.params.id);
-    })
-    .then(result => res.send(result));  // to send back updated version
-});
-
-app.post('/albums', (req, res) => {
-  Album
-    .create(req.body)
-    .then(result => res.json(result));
+    .catch(err => {
+      res.status(500).json({ error: 'something went terribly wrong' });
+    });
 });
 
 // return all genres if there isn't a query string
@@ -96,25 +126,48 @@ app.get('/genres', (req, res) => {
     Genre
       .find()
       .then(result => {
-        validGenres = result;
         res.json(result);
       });
   } else {
     Genre
-      .find( { name: { $regex : '.*' + req.query.q + '.*' } } )
+      .find({ name: { $regex: '.*' + req.query.q + '.*' } })
       .then(result => {
-        validGenres = result;
         res.json(result);
-      });
+      })
+      .catch(err => res.status(500).json('error'));
   }
 });
 
-let authenticator = passport.authenticate('basic', {session: false});
+app.post('/users', (req, res) => {
+  User
+    .find( { username: req.body.username } )
+    .count()
+    .then(count => {
+      if (count > 0) {
+        return res.status(400);
+      }
+      return User.hashPassword(req.body.password);
+    })
+    .then(password => {
+      return User
+        .create({
+          username: req.body.username,
+          password: password,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName
+        });
+    })
+    .then(user => {
+      return res.status(201).send(user.apiRepr());
+    })
+    .catch(err => {
+      res.status(500).json({message: 'Error!'});
+    });
+});
 
 let server;
 
-function runServer(databaseUrl=DATABASE_URL, port=PORT) {
-  console.log('inside runserver');
+function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, err => {
       if (err) {
@@ -151,4 +204,4 @@ if (require.main === module) {
   runServer().catch(err => console.error(err));
 }
 
-module.exports = {runServer, app, closeServer};
+module.exports = { runServer, app, closeServer };

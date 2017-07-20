@@ -35,7 +35,7 @@ as a user i'd like to
 as an admin i'd like to
   edit album properties
     1. login
-    2. go to an album
+    2. go to an album, delete stuff
     3. PUT on any/all fields, maybe using a .save()?
   delete users
     1. login
@@ -46,6 +46,7 @@ as an admin i'd like to
 -----------------------------
 technical goals, among others
 -----------------------------
+- all genre dbs will have to be preseeded
 - Briefly show the wireframes and user stories (so Joe has context)
 - Demo basic CRUD features using client app (or Postman)
 - Show working set of Integration Tests. At least 1 test per endpoint
@@ -119,3 +120,57 @@ user
     }
   ]
 }
+
+
+roadmap
+------
+
+DONE AREA ==============
+
+1) Unit Tests for existing endpoints
+  - PUT /album/:id/tags?
+  - POST /albums?
+  - GET /genres?
+
+
+
+
+DONE AREA ==============
+
+1.5) tests for auth
+
+2) Feature -- Authentication
+  - UI page to enter credentials (route = POST /login)
+    - For the UI use input type=text, and input type=password, and a login button (input type=button)
+  - UI page (use same page as login) for signup (route = POST /users to create a user)
+    - Duplicate users 
+    - For the UI use input type=text, and input type=password, and a signup button (input type=button)
+
+3) Feature -- Admin, with tests
+  - UI admin page (has the ability to delete a user)
+  - UI Add a link somewhere on main screen to the admin page if user.admin == true
+  - DELETE /users?username= ()
+  - DELETE /albums?name=
+  - PUT /users (username, new_username, new_password) 
+  - UI three 
+  - tests for all the endpoints
+
+4) Feature -- Comments, with tests
+  - PUT /albums/:id/comments (follow the same pattern we did for adding tags)
+    - UI will be a text field on the main screen and a button to add comment (the backend will have to know who the authenticated user is to add their username)
+
+5) Feature -- User Dashboard
+  - UI page that displays the user's username (once again fetch from headers or some other source)
+  - Only be able to see their own user
+
+  /ui_user/:id (12345) (54123)
+
+6) Feature -- Add comment editing to User Dashboard
+
+7) Feature -- Search by Tag
+
+router
+search and sort
+
+
+Heroku so people can use it
