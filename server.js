@@ -53,6 +53,11 @@ app.use(passport.initialize());
 
 let authenticator = passport.authenticate('basic', { session: false });
 
+// router.get('/me',
+//   passport.authenticate('basic', {session: false}),
+//   (req, res) => res.json({user: req.user.apiRepr()})
+// );
+
 // ---------
 // endpoints
 // ---------
@@ -93,7 +98,7 @@ app.get('/albums/', (req, res) => {
 
 // 596f06f6a8697cc121e07366
 // lorde pure heroine
-app.put('/albums/:id/tags', (req, res) => {
+app.put('/albums/:id/tags', authenticator, (req, res) => {
   Genre
     .find( { name: req.body.tag } )
     .count()
@@ -139,6 +144,40 @@ app.get('/genres', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
+  if (!req.body) {
+    return res.status(400).json({message: 'No request body'});
+  }
+
+  if (!('username' in req.body)) {
+    return res.status(422).json({message: 'Missing field: username'});
+  }
+
+  let {username, password, firstName, lastName} = req.body;
+
+  if (typeof username !== 'string') {
+    return res.status(422).json({message: 'Incorrect field type: username'});
+  }
+
+  username = username.trim();
+
+  if (username === '') {
+    return res.status(422).json({message: 'Incorrect field length: username'});
+  }
+
+  if (!(password)) {
+    return res.status(422).json({message: 'Missing field: password'});
+  }
+
+  if (typeof password !== 'string') {
+    return res.status(422).json({message: 'Incorrect field type: password'});
+  }
+
+  password = password.trim();
+
+  if (password === '') {
+    return res.status(422).json({message: 'Incorrect field length: password'});
+  }
+
   User
     .find( { username: req.body.username } )
     .count()

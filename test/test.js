@@ -161,7 +161,7 @@ describe('album discusser API', function () {
   });
 
   describe('the PUT albums & tags endpoint', function () {
-    it('should allow you to add a tag to an album', function () {
+    it.only('should allow you to add a tag to an album', function () {
       function getRandomAlbumId() {
         return Album
           .findOne()
@@ -181,7 +181,7 @@ describe('album discusser API', function () {
       let randomAlbumId;
       let randomGenre;
       let newAlbum;
-
+      // REMOVE THE .ONLY
       return Promise.all([getRandomAlbumId(), getRandomGenre()])
         .then(result => {
           randomAlbumId = result[0];
@@ -190,6 +190,7 @@ describe('album discusser API', function () {
         .then(() => {
           return chai.request(app)
             .put(`/albums/${randomAlbumId}/tags`)
+            .auth(USER.username, USER.unhashedPassword)
             .send({ tag: randomGenre })
             .then(result => {
               newAlbum = result.body;
