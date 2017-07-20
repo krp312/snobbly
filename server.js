@@ -24,22 +24,27 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(function (req, res, next) {
+  if (req.user) req.user.whatever = 'you like';
+  next();
+});
+
 mongoose.Promise = global.Promise;
 
 const basicStrategy = new BasicStrategy((username, password, callback) => {
   let validatedUser;
   User
-    .findOne({username})
-    .then(function(user) {
+    .findOne({ username })
+    .then(function (user) {
       validatedUser = user;
       if (!user) {
         return callback(null, false);
       }
-
+      console.log(validatedUser);
       return user.validatePassword(password);
     })
-    .then(function(passwordToBeTested) {
-      if (passwordToBeTested === false) {
+    .then(function (isPasswordValid) {
+      if (isPasswordValid === false) {
         return callback(null, false);
       }
 
@@ -64,8 +69,46 @@ let authenticator = passport.authenticate('basic', { session: false });
 
 let validGenres = [];
 
-app.get('/', (req, res) => {
+app.get('/', authenticator, (req, res) => {
+  console.log(req.user.username)
   res.status(200).sendFile(__dirname + '/views/index.html');
+});
+
+app.delete('/users/:username', authenticator, (req, res) => {
+  if (!(req.user.admin)) {
+    return res.status(500).json('sorry, you\'re not an admin');
+  }
+
+  User
+    .remove({ username: req.params.username })
+    .then(result => {
+      res.status(204).json('successful delete');
+    })
+    .catch(err => res.status(500).json('deletion unsuccessful'));
+});
+
+app.put('/albums/:id/comments', authenticator, (req, res) => {
+  // push another comment onto album with ID with req.user.properties, content = params.content
+  // {
+  //   id
+  //   timestamp
+  //   username
+  //   content
+  // }
+
+  // will have to update the album schema
+
+  //   const whatever = Comment.create({ fdfsdfsf }).then(load the album and push your comment)
+
+  //       var childSchema = new Schema({ name: 'string' });
+
+  // var parentSchema = new Schema({
+  //   // Array of subdocuments
+  //   children: [childSchema],
+  //   // Single nested subdocuments. Caveat: single nested subdocs only work
+  //   // in mongoose >= 4.2.0
+  //   child: childSchema
+  // });
 });
 
 app.get('/albums/', (req, res) => {
@@ -100,27 +143,33 @@ app.get('/albums/', (req, res) => {
 // lorde pure heroine
 app.put('/albums/:id/tags', authenticator, (req, res) => {
   Genre
-    .find( { name: req.body.tag } )
+    .find({ name: req.body.tag })
     .count()
     .then(count => {
       if (count === 1) {
         Album
           .findById(req.params.id)
           .then(album => {
-            if ( album.tags.indexOf(req.body.tag) > -1 ) {
+            if (album.tags.indexOf(req.body.tag) > -1) {
               return res.status(500).send('error');
             }
             Album
-              .findByIdAndUpdate( { _id: req.params.id }, { $push: { tags: req.body.tag } } )
+              .findByIdAndUpdate({ _id: req.params.id }, { $push: { tags: req.body.tag } })
               .then(() => {
                 return Album.findById(req.params.id);
               })
-              .then(result => res.status(201).json(result)); // to send back updated version        
+              .then(result => {
+                return res.status(201).json(result);  // to send back updated version     
+              });
           });
+      }
+      else {
+        throw Error;  // review why this needs to be here
       }
     })
     .catch(err => {
-      res.status(500).json({ error: 'something went terribly wrong' });
+      console.error(err.stack)
+      return res.status(500).json({ error: 'something went terribly wrong' });
     });
 });
 
@@ -145,41 +194,41 @@ app.get('/genres', (req, res) => {
 
 app.post('/users', (req, res) => {
   if (!req.body) {
-    return res.status(400).json({message: 'No request body'});
+    return res.status(400).json({ message: 'No request body' });
   }
 
   if (!('username' in req.body)) {
-    return res.status(422).json({message: 'Missing field: username'});
+    return res.status(422).json({ message: 'Missing field: username' });
   }
 
-  let {username, password, firstName, lastName} = req.body;
+  let { username, password, firstName, lastName, admin } = req.body;
 
   if (typeof username !== 'string') {
-    return res.status(422).json({message: 'Incorrect field type: username'});
+    return res.status(422).json({ message: 'Incorrect field type: username' });
   }
 
   username = username.trim();
 
   if (username === '') {
-    return res.status(422).json({message: 'Incorrect field length: username'});
+    return res.status(422).json({ message: 'Incorrect field length: username' });
   }
 
   if (!(password)) {
-    return res.status(422).json({message: 'Missing field: password'});
+    return res.status(422).json({ message: 'Missing field: password' });
   }
 
   if (typeof password !== 'string') {
-    return res.status(422).json({message: 'Incorrect field type: password'});
+    return res.status(422).json({ message: 'Incorrect field type: password' });
   }
 
   password = password.trim();
 
   if (password === '') {
-    return res.status(422).json({message: 'Incorrect field length: password'});
+    return res.status(422).json({ message: 'Incorrect field length: password' });
   }
 
   User
-    .find( { username: req.body.username } )
+    .find({ username: req.body.username })
     .count()
     .then(count => {
       if (count > 0) {
@@ -189,18 +238,19 @@ app.post('/users', (req, res) => {
     })
     .then(password => {
       return User
-        .create({
+        .create( {
           username: req.body.username,
           password: password,
           firstName: req.body.firstName,
-          lastName: req.body.lastName
-        });
+          lastName: req.body.lastName,
+          admin: req.body.admin
+        } );
     })
     .then(user => {
       return res.status(201).send(user.apiRepr());
     })
     .catch(err => {
-      res.status(500).json({message: 'Error!'});
+      res.status(500).json({ message: 'Error!' });
     });
 });
 

@@ -21,6 +21,15 @@ const USER = {
   lastName: faker.name.lastName()
 };
 
+const ADMIN_USER = {
+  username: faker.internet.userName(),
+  unhashedPassword: 'test',
+  password: '$2a$10$mjFeHXylKADWX8/HCsOQAu418D.VDL6.tjpgGUH82BrS8XMOecVuW',
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  admin: true
+};
+
 function tearDownDb() {
   return new Promise((resolve, reject) => {
     console.warn('Deleting database');
@@ -56,6 +65,25 @@ function seedAlbumDatabase() {
   return Album.insertMany(seedData);
 }
 
+function seedUserDatabase() {
+  console.log('seeding album database');
+
+  const seedData = [];
+  for (let i = 1; i <= 10; i++) {
+    seedData.push(
+      {
+        username: faker.internet.userName(),
+        password: faker.internet.password(),
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        admin: false
+      }
+    );
+  }
+
+  return User.insertMany(seedData);
+}
+
 function seedGenreDatabase() {
   console.log('seeding genre database');
 
@@ -68,9 +96,9 @@ function seedGenreDatabase() {
   return Genre.insertMany(seedData);
 }
 
-function seedOneUserData() {
-  console.log('seeding one user');
-  return User.create(USER);
+function seedOneUserAndOneAdminData() {
+  console.log('seeding one user and one admin');
+  return User.insertMany([USER, ADMIN_USER]);
 }
 
 describe('album discusser API', function () {
@@ -83,7 +111,8 @@ describe('album discusser API', function () {
       seedOneAlbum(),
       seedAlbumDatabase(),
       seedGenreDatabase(),
-      seedOneUserData()
+      seedOneUserAndOneAdminData(),
+      seedUserDatabase()
     ];
 
     return Promise.all(seedingFunctions);
@@ -101,6 +130,7 @@ describe('album discusser API', function () {
     it('should have a 200 status when calling it', function () {
       return chai.request(app)
         .get('/')
+        .auth(USER.username, USER.unhashedPassword)
         .then(res => {
           res.should.have.status(200);
         });
@@ -161,7 +191,7 @@ describe('album discusser API', function () {
   });
 
   describe('the PUT albums & tags endpoint', function () {
-    it.only('should allow you to add a tag to an album', function () {
+    it('should allow you to add a tag to an album', function () {
       function getRandomAlbumId() {
         return Album
           .findOne()
@@ -169,7 +199,6 @@ describe('album discusser API', function () {
             return album._id;
           });
       }
-
       function getRandomGenre() {
         return Genre
           .findOne()
@@ -177,11 +206,9 @@ describe('album discusser API', function () {
             return genre.name;
           });
       }
-
       let randomAlbumId;
       let randomGenre;
       let newAlbum;
-      // REMOVE THE .ONLY
       return Promise.all([getRandomAlbumId(), getRandomGenre()])
         .then(result => {
           randomAlbumId = result[0];
@@ -196,10 +223,8 @@ describe('album discusser API', function () {
               newAlbum = result.body;
               result.should.have.status(201);
               result.should.be.json;
-
               newAlbum.tags.should.be.an('array');
               newAlbum.tags.should.include(randomGenre);
-
               return Album.findById(randomAlbumId);
             })
             .then(updatedAlbum => {
@@ -269,13 +294,54 @@ describe('album discusser API', function () {
           user = result.body;
           user.should.include.keys('username', 'firstName', 'lastName');
 
-          return User.find( { username: mockUser.username } );
+          return User.find({ username: mockUser.username });
         })
         .then(databaseUser => {
           databaseUser[0].username.should.equal(user.username);
           databaseUser[0].firstName.should.equal(user.firstName);
           databaseUser[0].lastName.should.equal(user.lastName);
+        });
+    });
+  });
+
+  describe('DELETE endpoint for users', function () {
+    it('should allow an admin to delete a user', function () {
+      let randomUser;
+      User
+        .findOne()
+        .then(user => {
+          randomUser = user;
         })
+        .then(() => {
+          return chai.request(app)
+            .delete(`/users/${randomUser.username}`)
+            .auth(ADMIN_USER.username, ADMIN_USER.password);
+        })
+        .then(deleteRequest => {
+          deleteRequest.should.have.status(204);
+
+          return User.findById(randomUser._id);
+        })
+        .then(deletedUser => {
+          should.not.exist(deletedUser);
+        });
+    });
+
+    it('should stop non-admins from deleting users', function() {
+      let randomUser;
+      User
+        .findOne()
+        .then(user => {
+          randomUser = user;
+        })
+        .then(() => {
+          return chai.request(app)
+            .delete(`/users/${randomUser.username}`)
+            .auth(USER.username, USER.password);
+        })
+        .then(deleteRequest => {
+          deleteRequest.should.have.status(500).json('error');
+        });
     });
   });
 });
