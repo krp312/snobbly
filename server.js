@@ -58,11 +58,6 @@ app.use(passport.initialize());
 
 let authenticator = passport.authenticate('basic', { session: false });
 
-// router.get('/me',
-//   passport.authenticate('basic', {session: false}),
-//   (req, res) => res.json({user: req.user.apiRepr()})
-// );
-
 // ---------
 // endpoints
 // ---------
@@ -70,7 +65,6 @@ let authenticator = passport.authenticate('basic', { session: false });
 let validGenres = [];
 
 app.get('/', authenticator, (req, res) => {
-  console.log(req.user.username)
   res.status(200).sendFile(__dirname + '/views/index.html');
 });
 
