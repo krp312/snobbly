@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, OPTIONS, DELETE');
   next();
 });
 
@@ -40,7 +40,6 @@ const basicStrategy = new BasicStrategy((username, password, callback) => {
       if (!user) {
         return callback(null, false);
       }
-      console.log(validatedUser);
       return user.validatePassword(password);
     })
     .then(function (isPasswordValid) {
@@ -66,19 +65,6 @@ let validGenres = [];
 
 app.get('/', authenticator, (req, res) => {
   res.status(200).sendFile(__dirname + '/views/index.html');
-});
-
-app.delete('/users/:username', authenticator, (req, res) => {
-  if (!(req.user.admin)) {
-    return res.status(500).json('sorry, you\'re not an admin');
-  }
-
-  User
-    .remove({ username: req.params.username })
-    .then(result => {
-      res.status(204).json('successful delete');
-    })
-    .catch(err => res.status(500).json('deletion unsuccessful'));
 });
 
 app.put('/albums/:id/comments', authenticator, (req, res) => {
@@ -135,6 +121,7 @@ app.get('/albums/', (req, res) => {
 
 // 596f06f6a8697cc121e07366
 // lorde pure heroine
+// .findByIdAndUpdate( { _id: '596fa296bebce933fb43fdaf' }, { $push: { tags: 'anything' } }, { new: true } )
 app.put('/albums/:id/tags', authenticator, (req, res) => {
   Genre
     .find({ name: req.body.tag })
@@ -148,7 +135,7 @@ app.put('/albums/:id/tags', authenticator, (req, res) => {
               return res.status(500).send('error');
             }
             Album
-              .findByIdAndUpdate({ _id: req.params.id }, { $push: { tags: req.body.tag } })
+              .findByIdAndUpdate({ _id: req.params.id }, { $push: { tags: req.body.tag } } )
               .then(() => {
                 return Album.findById(req.params.id);
               })
@@ -162,7 +149,6 @@ app.put('/albums/:id/tags', authenticator, (req, res) => {
       }
     })
     .catch(err => {
-      console.error(err.stack)
       return res.status(500).json({ error: 'something went terribly wrong' });
     });
 });
@@ -232,13 +218,13 @@ app.post('/users', (req, res) => {
     })
     .then(password => {
       return User
-        .create( {
+        .create({
           username: req.body.username,
           password: password,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           admin: req.body.admin
-        } );
+        });
     })
     .then(user => {
       return res.status(201).send(user.apiRepr());
@@ -247,6 +233,41 @@ app.post('/users', (req, res) => {
       res.status(500).json({ message: 'Error!' });
     });
 });
+
+// =================================
+// =================================
+app.delete('/users/:username', authenticator, (req, res) => {
+  console.log('req.user', req.user)
+  // if (!(req.user.admin)) {
+  //   return res.status(500).json('sorry, you\'re not an admin');
+  // }
+
+  User
+    .remove({ username: req.params.username })
+    .then(result => {
+      res.status(204).json('successful delete');
+    })
+    .catch(err => res.status(500).json('deletion unsuccessful'));
+});
+// =================================
+// =================================
+
+app.delete('/albums/:name', authenticator, (req, res) => {
+  if (!(req.user.admin)) {
+    return res.status(500).json('sorry, you\'re not an admin');
+  }
+
+  Album
+    .remove( { name: req.params.name } )
+    .then(result => {
+      res.status(204).json('successful delete');
+    })
+    .catch(err => res.status(500).json('deletion unsuccessful'));
+});
+
+// ------------
+// server stuff
+// ------------
 
 let server;
 
@@ -283,7 +304,6 @@ function closeServer() {
 }
 
 if (require.main === module) {
-  console.log('am i being hit???');
   runServer().catch(err => console.error(err));
 }
 

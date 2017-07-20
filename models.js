@@ -11,7 +11,7 @@ const albumSchema = mongoose.Schema(
   {
     name:   { type: String, required: true },
     artist: { type: String, required: true },
-    tags: [],
+    tags: [], // { type: enum }
     ratings: {
       'one':   { type: Number, default: 0 },
       'two':   { type: Number, default: 0 },
@@ -55,9 +55,6 @@ userSchema.methods.validatePassword = function(password) {
 //     created: this.created
 //   };
 // };
-
-
-
 
 userSchema.methods.apiRepr = function() {
   return {

@@ -304,44 +304,83 @@ describe('album discusser API', function () {
     });
   });
 
+// =================================
+// =================================
   describe('DELETE endpoint for users', function () {
-    it('should allow an admin to delete a user', function () {
+    it.only('should allow an admin to delete a user', function () {
+      console.log(1);
       let randomUser;
       User
         .findOne()
         .then(user => {
+          console.log(2);
           randomUser = user;
         })
         .then(() => {
+          console.log(3);
+          console.log('admin', ADMIN_USER)
+          console.log('random user', randomUser)
           return chai.request(app)
             .delete(`/users/${randomUser.username}`)
             .auth(ADMIN_USER.username, ADMIN_USER.password);
         })
         .then(deleteRequest => {
+          console.log(4);
           deleteRequest.should.have.status(204);
 
           return User.findById(randomUser._id);
         })
+        // .catch(function(err) {    // added this to get rid of unauthorized
+        //   // console.log(err);
+        // })
         .then(deletedUser => {
           should.not.exist(deletedUser);
         });
     });
 
-    it('should stop non-admins from deleting users', function() {
-      let randomUser;
-      User
-        .findOne()
-        .then(user => {
-          randomUser = user;
-        })
-        .then(() => {
-          return chai.request(app)
-            .delete(`/users/${randomUser.username}`)
-            .auth(USER.username, USER.password);
-        })
-        .then(deleteRequest => {
-          deleteRequest.should.have.status(500).json('error');
-        });
-    });
+  // =================================
+  // =================================
+
+
+    // it('should stop non-admins from deleting users', function() {
+    //   let randomUser;
+    //   User
+    //     .findOne()
+    //     .then(user => {
+    //       randomUser = user;
+    //     })
+    //     .then(() => {
+    //       return chai.request(app)
+    //         .delete(`/users/${randomUser.username}`)
+    //         .auth(USER.username, USER.password);
+    //     })
+    //     .then(deleteRequest => {
+    //       deleteRequest.should.have.status(500).json('error');
+    //     });
+    // });
+  });
+
+  describe('DELETE endpoint for albums', function() {
+    // it('should allow an admin to delete a user', function () {
+    //   let randomUser;
+    //   User
+    //     .findOne()
+    //     .then(user => {
+    //       randomUser = user;
+    //     })
+    //     .then(() => {
+    //       return chai.request(app)
+    //         .delete(`/users/${randomUser.username}`)
+    //         .auth(ADMIN_USER.username, ADMIN_USER.password);
+    //     })
+    //     .then(deleteRequest => {
+    //       deleteRequest.should.have.status(204);
+
+    //       return User.findById(randomUser._id);
+    //     })
+    //     .then(deletedUser => {
+    //       should.not.exist(deletedUser);
+    //     });
+    // });
   });
 });
