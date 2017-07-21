@@ -101,6 +101,27 @@ function installSearchButtonListener() {
   });
 }
 
+function installSubmitButtonListener() {
+  $('#js-comment-submit-button').click(function (event) {
+    const content = $('#js-comment-submit-box').val();
+    const id = $('#js-album-id').val();
+
+    $.ajax({
+      url: `/albums/${id}/comments`,
+      dataType: 'json',
+      method: 'PUT',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        content: content
+      }),
+      success: function (data) {
+        $('#js-comment-submit-box').val('')
+        $('#js-album-search-button').trigger('click');
+      }
+    });
+  });
+}
+
 // db.albums.find( { artist: 'Lorde' } )
 
 function renderAlbumHeaderView(data) {
@@ -140,7 +161,7 @@ function renderCommentsView(data) {
     <div class="body">
       <span class="tip-up"></span>
       <div class="message">
-        <span>${comment.username} says: ${comment.content}</span>
+        <span>at ${comment.timestamp} ${comment.username} says: ${comment.content}</span>
       </div>
     </div>
   </div>
@@ -155,6 +176,7 @@ function renderCommentsView(data) {
 
 
 $(function () {
+  installSubmitButtonListener();
   installSearchButtonListener();
   genreSelector();
   albumSearcher();

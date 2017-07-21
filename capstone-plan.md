@@ -146,7 +146,10 @@ start page styling
 header for results
 
 ============== DONE AREA ==============
-
+understand front end code
+organize code so it can be presented
+auth only for posting comments
+sign up pop up?
 color in header divs with proper width
 static width, not too wide
 comments, demonstrating 2 diff users
