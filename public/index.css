@@ -1,4 +1,9 @@
- h1 {
+body {
+  text-align: center;
+  /* width:50%; */
+}
+
+h1 {
   font-weight: bold;
   color: red;
 }
@@ -6,15 +11,11 @@
 #js-start-view {
   background-color: lightblue;
   margin: 0 auto;
-  width: 100%;
+   width: 50%; 
   padding: 1em 0;
 }
 
-body {
-  text-align: center;
-}
-
-#js-start-view div {
+#js-start-view #album-searcher {
   border: 1px dashed white;
   display: inline-block;
   text-align: left;
@@ -25,43 +26,39 @@ body {
   line-height: 2;
 }
 
-input { display: block; }
-/* input[type="number"] {
-  max-width: 3em;
-}  */
-
 #js-genre-selector {
   width: 10em;
 }
 
-
 #js-tags-view {
-  float:left;
+  /* float:left; */
   background-color: red
 }
 
 #js-comments-view {
-  background-color: blue
-}
-
-#js-album-view {
-  width: 50%;
+  background-color: blue;
+  text-align: left;
 }
 
 #js-tags-view, #js-comments-view {
-  display: inline-block;
+  display: inline-block; 
   vertical-align: top;
+   width: 50%; 
 }
 
-.tags {
+#js-tags-view {
   list-style: none;
   margin: 0;
   overflow: hidden; 
   padding: 0;
 }
 
-.tags li {
-  float: left; 
+#js-tags-view li {
+   float: left;  
+}
+
+#genre-selector {
+  padding-top: 2em;
 }
 
 .tag {

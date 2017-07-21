@@ -91,7 +91,7 @@ function installSearchButtonListener() {
         // $('#js-album-tags').html(data.tags);
         // $('#js-album-rating').html(data.ratings);
         // $('#js-album-comments').html(data.comments);
-
+        $('#genre-selector').show();
         $('#js-tags-view').html(renderTagsView(data));
         $('#js-comments-view').html(renderCommentsView(data));
         $('#js-album-id').val(data._id);
@@ -113,7 +113,7 @@ function renderAlbumHtml(data) {
 }
 
 function renderTagsView(data) {
-  return `<div>tags:</div> ${createTagsList(data)}`
+  return `<div><h3>tagged:</h3></div> ${createTagsList(data)}`
 }
 
 function createTagsList(data) {
@@ -155,12 +155,12 @@ $(function () {
 // Registered to	krp312
 
 
-{
-  username: 'brtny4lyf',
-  content: 'just leave her alone'
-}
+// {
+//   username: 'brtny4lyf',
+//   content: 'just leave her alone'
+// }
 
-db.collection.update({ name: 'Pure Heroine' }, { $push: { comments: {
-  username: 'brtny4lyf',
-  content: 'just leave her alone'
-} } } )
+// db.albums.update({ name: 'Pure Heroine' }, { $push: { comments: {
+//   username: 'mackymack',
+//   content: 'i like stuff'
+// } } } )

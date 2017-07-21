@@ -20,13 +20,13 @@
     <h1>album discusser</h1>
 
     <div id='js-start-view'>
-      <div>
+      <div id='album-searcher'>
         <label for="js-album-searcher">find by artist</label>
         <input id="js-album-searcher">
         <button id='js-album-search-button'>search</button>
       </div>
 
-      <div>
+      <div id='genre-selector' hidden>
         <input type='hidden' id='js-album-id'></input>
           <select id="js-genre-selector">
           <option>tag album</option>
@@ -34,10 +34,10 @@
       </div>
     </div>
 
-    <div id='js-album-view'>
-      <div id='js-tags-view' class='tags'></div>
-      <div id='js-comments-view'>test test set est s</div>
-    </div>    
+
+      <div id='js-comments-view'></div>
+      <div id='js-tags-view'></div>
+
 
     <script src="index.js"></script>
   </body>
