@@ -91,8 +91,11 @@ function installSearchButtonListener() {
         // $('#js-album-tags').html(data.tags);
         // $('#js-album-rating').html(data.ratings);
         // $('#js-album-comments').html(data.comments);
+        $('#js-album-searcher').val('');
         $('#genre-selector').show();
+        $('#js-album-header-view').html(renderAlbumHeaderView(data));
         $('#js-tags-view').html(renderTagsView(data));
+        $('#js-comments-header').html(renderCommentsHeader);
         $('#js-comments-view').html(renderCommentsView(data));
         $('#js-album-id').val(data._id);
       }
@@ -102,6 +105,10 @@ function installSearchButtonListener() {
 }
 
 // db.albums.find( { artist: 'Lorde' } )
+
+function renderAlbumHeaderView(data) {
+  return `<h2>${data.name} by ${data.artist}</h2>`;
+}
 
 function renderAlbumHtml(data) {
   const headerHtml = `Artist: ${data.artist}, Album: ${data.name}`;
@@ -126,14 +133,24 @@ function createTagsList(data) {
   return tags;
 }
 
+
+
+function renderCommentsHeader() {
+ return `<h3>comments:</h3>`;
+}
+
 function renderCommentsView(data) {
   // data.comments is an array of objects whose properties are username, content
-  console.log(data.comments)
   const comments = data.comments.map(function (comment) {
-    return `<li>
-      <div>${comment.username} says:</div>
-      <div>${comment.content}</div>
-      </li>`;
+    return `</div><div class="dialogbox">
+    <div class="body">
+      <span class="tip-up"></span>
+      <div class="message">
+        <span>${comment.username} says: ${comment.content}</span>
+      </div>
+    </div>
+  </div>
+</div>`
   });
 
   return comments;

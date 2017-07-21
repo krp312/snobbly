@@ -147,6 +147,7 @@ start page styling
 ============== DONE AREA ==============
 
 album result styling
+  header for results
 dummy doc with comments
 github readme & other friday-morning-link stuff
 comments, demonstrating 2 diff users
