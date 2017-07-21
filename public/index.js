@@ -87,10 +87,7 @@ function installSearchButtonListener() {
       },
       success: function (data) {
         data = data[0] || data;
-        // $('#js-album-header').html(data.artist + ' ' + data.name);
-        // $('#js-album-tags').html(data.tags);
-        // $('#js-album-rating').html(data.ratings);
-        // $('#js-album-comments').html(data.comments);
+        $('#js-album-view').show();
         $('#js-album-searcher').val('');
         $('#genre-selector').show();
         $('#js-album-header-view').html(renderAlbumHeaderView(data));
