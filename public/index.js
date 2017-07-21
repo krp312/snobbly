@@ -63,7 +63,7 @@ function albumSearcher() {
         },
         success: function (data) {
           result = data.topalbums.album.map(function (object) {
-            return `${object.artist.name} | ${object.name}`;
+            return `${object.artist.name} || ${object.name}`;
           });
           response(result);
         }
@@ -76,7 +76,7 @@ function albumSearcher() {
 // artist: LED | album: Wściekłość i wrzask
 function installSearchButtonListener() {
   $('#js-album-search-button').click(function (event) {
-    const [artist, name] = $('#js-album-searcher').val().split('|');
+    const [artist, name] = $('#js-album-searcher').val().split('||');
 
     $.ajax({
       url: '/albums',
