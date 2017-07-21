@@ -14,13 +14,13 @@ function genreSelector() {
       url: '/genres',
       dataType: 'json',
       delay: 250,
-      data: function(params) {
+      data: function (params) {
         return {
-          q: params.term, 
+          q: params.term,
         };
       },
       processResults: function (data) {
-        const namesArr = data.map(function(object) {
+        const namesArr = data.map(function (object) {
           return { id: object._id, text: object.name };
         });
         return {
@@ -32,7 +32,7 @@ function genreSelector() {
     minimumInputLength: 1
   });
 
-  $('#js-genre-selector').on('select2:select', function(event) {
+  $('#js-genre-selector').on('select2:select', function (event) {
     const selection = event.params.data.text;
     const id = $('#js-album-id').val();
 
@@ -44,7 +44,7 @@ function genreSelector() {
       data: JSON.stringify({
         tag: selection
       }),
-      success: function(data) {
+      success: function (data) {
         $('#js-album-search-button').trigger('click');
       }
     });
@@ -52,8 +52,8 @@ function genreSelector() {
 }
 
 function albumSearcher() {
-  $( '#js-album-searcher' ).autocomplete({
-    source: function( request, response ) {
+  $('#js-album-searcher').autocomplete({
+    source: function (request, response) {
       let result;
       $.ajax({
         url: 'https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&api_key=9cb98547379ad2c1b5b680646cbdac53&format=json',
@@ -61,8 +61,8 @@ function albumSearcher() {
         data: {
           artist: request.term
         },
-        success: function( data ) {
-          result = data.topalbums.album.map(function(object) {
+        success: function (data) {
+          result = data.topalbums.album.map(function (object) {
             return `${object.artist.name} | ${object.name}`;
           });
           response(result);
@@ -75,8 +75,8 @@ function albumSearcher() {
 
 // artist: LED | album: Wściekłość i wrzask
 function installSearchButtonListener() {
-  $('#js-album-search-button').click(function(event) {
-    const [ artist, name ] = $('#js-album-searcher').val().split('|');
+  $('#js-album-search-button').click(function (event) {
+    const [artist, name] = $('#js-album-searcher').val().split('|');
 
     $.ajax({
       url: '/albums',
@@ -85,15 +85,14 @@ function installSearchButtonListener() {
         artist: artist.trim(),
         name: name.trim()
       },
-      success: function(data) {
+      success: function (data) {
         data = data[0] || data;
         // $('#js-album-header').html(data.artist + ' ' + data.name);
         // $('#js-album-tags').html(data.tags);
         // $('#js-album-rating').html(data.ratings);
         // $('#js-album-comments').html(data.comments);
 
-        
-        $('#js-tags-view').html(`tags: ${renderTagsView(data)}`);
+        $('#js-tags-view').html(renderTagsView(data));
         $('#js-comments-view').html(renderCommentsView(data));
         $('#js-album-id').val(data._id);
       }
@@ -107,17 +106,21 @@ function installSearchButtonListener() {
 function renderAlbumHtml(data) {
   const headerHtml = `Artist: ${data.artist}, Album: ${data.name}`;
   const tagsHtml = createTagsView(data);
-  const commentsHtml = data.comments.length > 0 ? `comments: ${data.comments[0].username} ${data.comments[0].content}`: 'Comments: ';
+  const commentsHtml = data.comments.length > 0 ? `comments: ${data.comments[0].username} ${data.comments[0].content}` : 'Comments: ';
   return `${headerHtml} <br>
           ${tagsHtml} <br>
           ${commentsHtml} <br>`;
 }
 
 function renderTagsView(data) {
+  return `<div>tags:</div> ${createTagsList(data)}`
+}
+
+function createTagsList(data) {
   // data.tags is an array of strings where each tag is a string
   console.log(data.tags)
-  const tags = data.tags.map(function(tag) {
-    return `<li>${tag}</li>`;
+  const tags = data.tags.map(function (tag) {
+    return `<li class='tag'>${tag}</li>`;
   });
 
   return tags;
@@ -126,7 +129,7 @@ function renderTagsView(data) {
 function renderCommentsView(data) {
   // data.comments is an array of objects whose properties are username, content
   console.log(data.comments)
-  const comments = data.comments.map(function(comment) {
+  const comments = data.comments.map(function (comment) {
     return `<li>
       <div>${comment.username} says:</div>
       <div>${comment.content}</div>
@@ -138,7 +141,9 @@ function renderCommentsView(data) {
 
 
 
-$(function() {
+
+
+$(function () {
   installSearchButtonListener();
   genreSelector();
   albumSearcher();
@@ -148,3 +153,14 @@ $(function() {
 // API key	9cb98547379ad2c1b5b680646cbdac53
 // Shared secret	8d5ad4d7da3487a8bf07b5b312ecf66c
 // Registered to	krp312
+
+
+{
+  username: 'brtny4lyf',
+  content: 'just leave her alone'
+}
+
+db.collection.update({ name: 'Pure Heroine' }, { $push: { comments: {
+  username: 'brtny4lyf',
+  content: 'just leave her alone'
+} } } )
