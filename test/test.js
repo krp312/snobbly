@@ -32,7 +32,7 @@ const ADMIN_USER = {
 
 function tearDownDb() {
   return new Promise((resolve, reject) => {
-    console.warn('Deleting database');
+    console.warn('deleting database');
     mongoose.connection.dropDatabase()
       .then(result => resolve(result))
       .catch(err => reject(err));
@@ -45,13 +45,10 @@ const ALBUM = {
 };
 
 function seedOneAlbum() {
-  console.log('seeding one album');
   return Album.create(ALBUM);
 }
 
 function seedAlbumDatabase() {
-  console.log('seeding album database');
-
   const seedData = [];
   for (let i = 1; i <= 10; i++) {
     seedData.push(
@@ -66,8 +63,6 @@ function seedAlbumDatabase() {
 }
 
 function seedUserDatabase() {
-  console.log('seeding album database');
-
   const seedData = [];
   for (let i = 1; i <= 10; i++) {
     seedData.push(
@@ -85,8 +80,6 @@ function seedUserDatabase() {
 }
 
 function seedGenreDatabase() {
-  console.log('seeding genre database');
-
   const seedData = [
     { name: 'chillwave' },
     { name: 'gammeldans' },
@@ -97,16 +90,16 @@ function seedGenreDatabase() {
 }
 
 function seedOneUserAndOneAdminData() {
-  console.log('seeding one user and one admin');
   return User.insertMany([USER, ADMIN_USER]);
 }
 
-describe('album discusser API', function () {
+describe('', function () {
   before(function () {
     return runServer(TEST_DATABASE_URL);
   });
 
   beforeEach(function () {
+    console.warn('seeding database');
     const seedingFunctions = [
       seedOneAlbum(),
       seedAlbumDatabase(),
@@ -126,18 +119,21 @@ describe('album discusser API', function () {
     return closeServer();
   });
 
-  describe('the root GET endpoint', function () {
+  describe('root GET', function () {
     it('should have a 200 status when calling it', function () {
       return chai.request(app)
         .get('/')
         .auth(USER.username, USER.unhashedPassword)
         .then(res => {
           res.should.have.status(200);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
   });
 
-  describe('the /albums GET endpoint', function () {
+  describe('/albums GET', function () {
     it('should return the searched album if it\'s already in the database', function () {
       let album;
       return chai.request(app)
@@ -151,91 +147,89 @@ describe('album discusser API', function () {
           album.should.include.keys('name', 'artist');
           album.name.should.equal(ALBUM.name);
           album.artist.should.equal(ALBUM.artist);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
 
     it('should create a new album if the album doesn\'t exist in the database', function () {
       let album;
-      let oldCount;
       const neverInAMillionYearsAlbum = {
         name: faker.random.words(),
         artist: faker.name.firstName()
       };
 
-      Album
+      return Album
         .find(neverInAMillionYearsAlbum)
         .count()
         .then(count => {
           count.should.equal(0);
-        });
-
-      return chai.request(app)
-        .get('/albums')
-        .query(neverInAMillionYearsAlbum)
+          return chai.request(app)
+            .get('/albums')
+            .query(neverInAMillionYearsAlbum);
+        })
         .then(result => {
           result.should.have.status(201);
-
           album = result.body;
           album.should.be.an('object');
           album.name.should.equal(neverInAMillionYearsAlbum.name);
           album.artist.should.equal(neverInAMillionYearsAlbum.artist);
-
           return Album
             .find(neverInAMillionYearsAlbum)
-            .count()
-            .then(count => {
-              count.should.equal(1);
-            });
+            .count();
+        })
+        .then(count => {
+          count.should.equal(1);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
   });
 
-  describe('the PUT albums & tags endpoint', function () {
+  describe('albums & tags PUT', function () {
     it('should allow you to add a tag to an album', function () {
-      function getRandomAlbumId() {
-        return Album
-          .findOne()
-          .then(album => {
-            return album._id;
-          });
-      }
-      function getRandomGenre() {
-        return Genre
-          .findOne()
-          .then(genre => {
-            return genre.name;
-          });
-      }
       let randomAlbumId;
       let randomGenre;
       let newAlbum;
+
+      function getRandomAlbumId() {
+        return Album.findOne().then(album => album._id);
+      }
+
+      function getRandomGenre() {
+        return Genre.findOne().then(genre => genre.name);
+      }
+
       return Promise.all([getRandomAlbumId(), getRandomGenre()])
         .then(result => {
           randomAlbumId = result[0];
           randomGenre = result[1];
-        })
-        .then(() => {
           return chai.request(app)
             .put(`/albums/${randomAlbumId}/tags`)
             .auth(USER.username, USER.unhashedPassword)
-            .send({ tag: randomGenre })
-            .then(result => {
-              newAlbum = result.body;
-              result.should.have.status(201);
-              result.should.be.json;
-              newAlbum.tags.should.be.an('array');
-              newAlbum.tags.should.include(randomGenre);
-              return Album.findById(randomAlbumId);
-            })
-            .then(updatedAlbum => {
-              updatedAlbum.tags.should.include(randomGenre);
-              updatedAlbum.name.should.equal(newAlbum.name);
-            });
+            .send({ tag: randomGenre });
+        })
+        .then(result => {
+          newAlbum = result.body;
+          result.should.have.status(201);
+          result.should.be.json;
+          newAlbum.tags.should.be.an('array');
+          newAlbum.tags.should.include(randomGenre);
+          return Album.findById(randomAlbumId);
+        })
+        .then(updatedAlbum => {
+          updatedAlbum.tags.should.include(randomGenre);
+          updatedAlbum.name.should.equal(newAlbum.name);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
   });
 
-  describe('the GET for genres', function () {
+  describe('genres GET', function () {
     it('should return all genres if there is no query string', function () {
       let genreList;
       return chai.request(app)
@@ -251,6 +245,9 @@ describe('album discusser API', function () {
         })
         .then(count => {
           genreList.should.have.lengthOf(count);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
 
@@ -272,11 +269,14 @@ describe('album discusser API', function () {
         })
         .then(count => {
           genreList.should.have.lengthOf(count);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
   });
 
-  describe('POST endpoint for users', function () {
+  describe('users POST', function () {
     it('should create a new user if the username doesn\'t already exist', function () {
       const mockUser = {
         username: faker.internet.userName(),
@@ -300,87 +300,84 @@ describe('album discusser API', function () {
           databaseUser[0].username.should.equal(user.username);
           databaseUser[0].firstName.should.equal(user.firstName);
           databaseUser[0].lastName.should.equal(user.lastName);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
   });
 
-// =================================
-// =================================
-  describe('DELETE endpoint for users', function () {
-    it.only('should allow an admin to delete a user', function () {
-      console.log(1);
+  describe('users DELETE', function () {
+    it('should allow an admin to delete a user', function () {
       let randomUser;
-      User
+      return User    //     THE MOTHERFUCKNIG RETURN !!!!!
         .findOne()
         .then(user => {
-          console.log(2);
           randomUser = user;
         })
         .then(() => {
-          console.log(3);
-          console.log('admin', ADMIN_USER)
-          console.log('random user', randomUser)
           return chai.request(app)
             .delete(`/users/${randomUser.username}`)
-            .auth(ADMIN_USER.username, ADMIN_USER.password);
+            .auth(ADMIN_USER.username, ADMIN_USER.unhashedPassword);  // UNHASHED PASSWORD!!!
         })
         .then(deleteRequest => {
-          console.log(4);
           deleteRequest.should.have.status(204);
 
           return User.findById(randomUser._id);
         })
-        // .catch(function(err) {    // added this to get rid of unauthorized
-        //   // console.log(err);
-        // })
         .then(deletedUser => {
           should.not.exist(deletedUser);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
         });
     });
 
-  // =================================
-  // =================================
-
-
-    // it('should stop non-admins from deleting users', function() {
-    //   let randomUser;
-    //   User
-    //     .findOne()
-    //     .then(user => {
-    //       randomUser = user;
-    //     })
-    //     .then(() => {
-    //       return chai.request(app)
-    //         .delete(`/users/${randomUser.username}`)
-    //         .auth(USER.username, USER.password);
-    //     })
-    //     .then(deleteRequest => {
-    //       deleteRequest.should.have.status(500).json('error');
-    //     });
-    // });
+    it('should stop non-admins from deleting users', function () {
+      let randomUser;
+      return User
+        .findOne()
+        .then(user => {
+          randomUser = user;
+        })
+        .then(() => {
+          chai.request(app)
+            .delete(`/users/${randomUser.username}`)
+            .auth(USER.username, USER.unhashedPassword)
+            .end(function (err, res) {      // ask about this later (chaihttp response testing)
+              res.should.have.status(500);
+            });
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
+        });
+    });
   });
 
-  describe('DELETE endpoint for albums', function() {
-    // it('should allow an admin to delete a user', function () {
-    //   let randomUser;
-    //   User
-    //     .findOne()
-    //     .then(user => {
-    //       randomUser = user;
-    //     })
-    //     .then(() => {
-    //       return chai.request(app)
-    //         .delete(`/users/${randomUser.username}`)
-    //         .auth(ADMIN_USER.username, ADMIN_USER.password);
-    //     })
-    //     .then(deleteRequest => {
-    //       deleteRequest.should.have.status(204);
+  describe('albums DELETE', function () {
+    it('should allow an admin to delete an album', function () {
+      let randomAlbum;
+      return Album
+        .findOne()
+        .then(album => {
+          randomAlbum = album;
+        })
+        .then(() => {
+          return chai.request(app)
+            .delete(`/albums/${randomAlbum.name}`)
+            .auth(ADMIN_USER.username, ADMIN_USER.unhashedPassword)
+        })
+        .then(deleteRequest => {
+          deleteRequest.should.have.status(204);
 
-    //       return User.findById(randomUser._id);
-    //     })
-    //     .then(deletedUser => {
-    //       should.not.exist(deletedUser);
-    //     });
-    // });
+          return Album.findById(randomAlbum._id);
+        })
+        .then(deletedAlbum => {
+          should.not.exist(deletedAlbum);
+        })
+        .catch(function (err) {
+          console.error('error', err.stack);
+        });
+    });
   });
 });

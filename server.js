@@ -33,6 +33,7 @@ mongoose.Promise = global.Promise;
 
 const basicStrategy = new BasicStrategy((username, password, callback) => {
   let validatedUser;
+
   User
     .findOne({ username })
     .then(function (user) {
@@ -234,13 +235,10 @@ app.post('/users', (req, res) => {
     });
 });
 
-// =================================
-// =================================
 app.delete('/users/:username', authenticator, (req, res) => {
-  console.log('req.user', req.user)
-  // if (!(req.user.admin)) {
-  //   return res.status(500).json('sorry, you\'re not an admin');
-  // }
+  if (!(req.user.admin)) {
+    return res.status(500).json('sorry, you\'re not an admin');
+  }
 
   User
     .remove({ username: req.params.username })
@@ -249,8 +247,6 @@ app.delete('/users/:username', authenticator, (req, res) => {
     })
     .catch(err => res.status(500).json('deletion unsuccessful'));
 });
-// =================================
-// =================================
 
 app.delete('/albums/:name', authenticator, (req, res) => {
   if (!(req.user.admin)) {
