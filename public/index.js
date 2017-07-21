@@ -92,7 +92,7 @@ function installSearchButtonListener() {
         // $('#js-album-rating').html(data.ratings);
         // $('#js-album-comments').html(data.comments);
 
-        $('#js-album-header').html(createAlbumHtml(data));
+        $('#js-album-view').html(createAlbumHtml(data));
         $('#js-album-id').val(data._id);
       }
     });

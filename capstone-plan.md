@@ -141,23 +141,26 @@ test naming scheme
 return check
 reflections
 how to test the incorrect auth
+heroku transition
 
 ============== DONE AREA ==============
 
 github readme & other friday-morning-link stuff
-heroku transition
+comments, demonstrating 2 diff users
+styling
+admin view
 
 router
 refactor, including put endpoint (in sandbox.js)
 enum genre solution: http://mongoosejs.com/docs/api.html#schema_string_SchemaString-enum
 
 2) Feature -- Authentication
-  * UI page (use same page as login) for signup (route = POST /users to create a user)
+  ** UI page (use same page as login) for signup (route = POST /users to create a user)
     * For the UI use input type=text, and input type=password, and a signup button (input type=button)
 
 3) Feature -- Admin, with tests
-  * UI admin page (has the ability to delete a user)
-  * UI Add a link somewhere on main screen to the admin page if user.admin == true
+  ** UI admin page (has the ability to delete a user and album)
+  ** UI Add a link somewhere on main screen to the admin page if user.admin == true
   * all with admin check (admin property on user schema, predetermined 1 admin user)
     x DELETE /users/:username
     x DELETE /albums/:name
@@ -165,9 +168,11 @@ enum genre solution: http://mongoosejs.com/docs/api.html#schema_string_SchemaStr
   * UI three 
   x tests for all the endpoints
 
+-----------
+
 4) Feature -- Comments, with tests. subdocuments? ask chris (response: see sandbox-comment-model.js)
-  * PUT /albums/:id/comments (follow the same pattern we did for adding tags)
-    * UI will be a text field on the main screen and a button to add comment (the backend will have to know who the authenticated user is to add their username)
+  ** PUT /albums/:id/comments (follow the same pattern we did for adding tags)
+    ** UI will be a text field on the main screen and a button to add comment (the backend will have to know who the authenticated user is to add their username)
 
 5) Feature -- User Dashboard
   * UI page that displays the user's username (once again fetch from headers or some other source)
@@ -179,3 +184,16 @@ enum genre solution: http://mongoosejs.com/docs/api.html#schema_string_SchemaStr
 would be nice maybe in the future
 ---------------------------------
 6) Feature -- Add comment editing to User Dashboard
+
+
+
+placeholder.html
+ajax query -> /ui/index and take the content of that and put it in the placeholder div
+<div id=placeholder>
+</div>
+
+
+endpoint GET /ui/index
+  // Load the index.html
+  // Return the index.html
+

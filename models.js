@@ -59,6 +59,28 @@ const userSchema = mongoose.Schema(
   //   "admin": true
   // }
 
+// {
+// 	username : "krp312",
+// 	password : "$2a$10$ojJACvL6FfYyQYcdgjh8y.jJtKxUfHg91WhaZhfbslxErHr2PW25e",
+// 	firstName : "Kris",
+// 	lastName : "Panahon",
+// 	admin : false
+// }
+// {
+// 	username : "bball4lyf",
+// 	password : "$2a$10$zQ1eifMq2ZrBs3vMdvgCf.pRXVDEu4AKw6Z4kTTL5nBFtojIM45aC",
+// 	firstName : "Michael",
+// 	lastName : "Jordan",
+// 	admin : false
+// }
+// {
+// 	username : "mscott",
+// 	password : "$2a$10$U/wzDHJ/hi7ahGZ.QxQ.fuwzlajmCojXCm7YnYfR/iBUl14Hik9Z.",
+// 	firstName : "Michael",
+// 	lastName : "Scott",
+// 	admin : true
+// }
+
 userSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };

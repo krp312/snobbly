@@ -1,8 +1,42 @@
-h1 {
+ h1 {
   font-weight: bold;
   color: red;
 }
 
-#js-genre-selector, #js-album-searcher {
-  width: 400px;
+#js-start-view {
+  background-color: lightblue;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1em 0;
+}
+
+body {
+  text-align: center;
+}
+
+#js-start-view {
+  background-color: lightblue;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1em 0;
+}
+
+#js-start-view div {
+  border: 1px dashed white;
+  display: inline-block;
+  text-align: left;
+}
+
+#js-album-searcher {
+  display: inline-block;
+  line-height: 2;
+}
+
+input { display: block; }
+/* input[type="number"] {
+  max-width: 3em;
+}  */
+
+#js-genre-selector {
+  width: 10em;
 }
