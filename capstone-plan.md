@@ -144,19 +144,18 @@ how to test the incorrect auth
 heroku transition
 start page styling
 header for results
+sign up pop up
 
 ============== DONE AREA ==============
 understand front end code
 organize code so it can be presented
 auth only for posting comments
-sign up pop up?
 color in header divs with proper width
 static width, not too wide
 comments, demonstrating 2 diff users
 dummy doc with comments
 github readme & other friday-morning-link stuff
 admin view
-
 router
 refactor, including put endpoint (in sandbox.js)
 enum genre solution: http://mongoosejs.com/docs/api.html#schema_string_SchemaString-enum

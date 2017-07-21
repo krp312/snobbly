@@ -200,8 +200,7 @@ function installSignupButtonListener() {
         password: password
       }),
       success: function (data) {
-        // $('#js-comment-submit-box').val('');
-        // $('#js-album-search-button').trigger('click');
+        $('#js-signup-success').show();
       }
     });
   });
