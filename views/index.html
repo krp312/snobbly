@@ -18,7 +18,38 @@
     <link rel="stylesheet" href="jquery-ui.css">
   </head>
   <body>
-    <h1>album discusser</h1>
+
+<div>
+  <div id='banner'><h1>album discusser</h1></div>
+  <div id='signup-button'>
+                <div class="container">
+            <a id="modal_trigger" href="#modal" class="btn">sign up!</a>
+            <div id="modal" class="popupContainer" style="display:none;">
+              <header class="popupHeader">
+                      <span class="header_title">Login</span>
+                      <span class="modal_close"><i class="fa fa-times"></i></span>
+              </header>
+              <section class="popupBody">
+                <div class="user_register">
+                  <form>
+                    <label>username</label>
+                    <input type="text" id='js-signup-username'/>
+                    <br />
+
+                    <label>password</label>
+                    <input type="password" id='js-signup-password' />
+                    <br />
+
+                    <div class="action_btns">
+                    <div class="one_half last"><a href="#" class="btn btn_red" id='js-signup-button'>sign me up!</a></div>
+                    </div>
+                  </form>
+                </div>
+              </section>
+            </div>
+          </div>
+  </div>
+</div>
 
     <div id='js-start-view'>
       <div id='album-searcher'>
@@ -50,42 +81,6 @@
     <div id='js-comments-view'></div>
     <div id='js-tags-view'></div>
     </div>
-
-
-
-<div class="container">
-        <a id="modal_trigger" href="#modal" class="btn">sign up!</a>
-
-        <div id="modal" class="popupContainer" style="display:none;">
-              <header class="popupHeader">
-                      <span class="header_title">Login</span>
-                      <span class="modal_close"><i class="fa fa-times"></i></span>
-              </header>
-
-              <section class="popupBody">
-
-                      <!-- Register Form -->
-                      <div class="user_register">
-                            <form>
-                                  <label>username</label>
-                                  <input type="text" id='js-signup-username'/>
-                                  <br />
-
-                                  <label>password</label>
-                                  <input type="password" id='js-signup-password' />
-                                  <br />
-
-                                  <div class="action_btns">
-                                  <div class="one_half last"><a href="#" class="btn btn_red" id='js-signup-button'>sign me up!</a></div>
-                                  </div>
-                            </form>
-                      </div>
-              </section>
-        </div>
-</div>
-
-
-
 
     <script src="index.js"></script>
   </body>
