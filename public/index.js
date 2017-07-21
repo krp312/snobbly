@@ -92,7 +92,9 @@ function installSearchButtonListener() {
         // $('#js-album-rating').html(data.ratings);
         // $('#js-album-comments').html(data.comments);
 
-        $('#js-album-view').html(createAlbumHtml(data));
+        
+        $('#js-tags-view').html(`tags: ${renderTagsView(data)}`);
+        $('#js-comments-view').html(renderCommentsView(data));
         $('#js-album-id').val(data._id);
       }
     });
@@ -102,28 +104,39 @@ function installSearchButtonListener() {
 
 // db.albums.find( { artist: 'Lorde' } )
 
-function createAlbumHtml(data) {
-  const headerHtml = `artist: ${data.artist} album: ${data.name}`;
-  const tagsHtml = `(${data.tags})`;
-  const ratingsHtml = `
-    ${data.ratings.one} 
-    ${data.ratings.two} 
-    ${data.ratings.three}
-    ${data.ratings.four}
-    ${data.ratings.five}<br>
-    <input type="button">1</input>
-    <input type="button">2</input>
-    <input type="button">3</input>
-    <input type="button">4</input>
-    <input type="button">5</input>
-  `;
-
+function renderAlbumHtml(data) {
+  const headerHtml = `Artist: ${data.artist}, Album: ${data.name}`;
+  const tagsHtml = createTagsView(data);
   const commentsHtml = data.comments.length > 0 ? `comments: ${data.comments[0].username} ${data.comments[0].content}`: 'Comments: ';
   return `${headerHtml} <br>
           ${tagsHtml} <br>
-          ${ratingsHtml} <br>
           ${commentsHtml} <br>`;
 }
+
+function renderTagsView(data) {
+  // data.tags is an array of strings where each tag is a string
+  console.log(data.tags)
+  const tags = data.tags.map(function(tag) {
+    return `<li>${tag}</li>`;
+  });
+
+  return tags;
+}
+
+function renderCommentsView(data) {
+  // data.comments is an array of objects whose properties are username, content
+  console.log(data.comments)
+  const comments = data.comments.map(function(comment) {
+    return `<li>
+      <div>${comment.username} says:</div>
+      <div>${comment.content}</div>
+      </li>`;
+  });
+
+  return comments;
+}
+
+
 
 $(function() {
   installSearchButtonListener();

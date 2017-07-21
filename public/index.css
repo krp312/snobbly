@@ -40,3 +40,8 @@ input { display: block; }
 #js-genre-selector {
   width: 10em;
 }
+
+#js-tags-view, #js-comments-view {
+  display: inline-block;
+  vertical-align: top;
+}

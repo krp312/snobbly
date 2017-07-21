@@ -142,12 +142,13 @@ return check
 reflections
 how to test the incorrect auth
 heroku transition
+start page styling
 
 ============== DONE AREA ==============
 
+album result styling
 github readme & other friday-morning-link stuff
 comments, demonstrating 2 diff users
-styling
 admin view
 
 router
