@@ -11,7 +11,7 @@ const state = {
 function genreSelector() {
   $('#js-genre-selector').select2({
     ajax: {
-      url: 'http://localhost:8080/genres',
+      url: '/genres',
       dataType: 'json',
       delay: 250,
       data: function(params) {
@@ -37,7 +37,7 @@ function genreSelector() {
     const id = $('#js-album-id').val();
 
     $.ajax({
-      url: `http://localhost:8080/albums/${id}/tags`,
+      url: `/albums/${id}/tags`,
       dataType: 'json',
       method: 'PUT',
       contentType: 'application/json; charset=utf-8',
@@ -79,7 +79,7 @@ function installSearchButtonListener() {
     const [ artist, name ] = $('#js-album-searcher').val().split('|');
 
     $.ajax({
-      url: 'http://localhost:8080/albums',
+      url: '/albums',
       dataType: 'json',
       data: {
         artist: artist.trim(),

@@ -34,6 +34,31 @@ const userSchema = mongoose.Schema(
   }
 );
 
+
+  // {
+  //   "username": "krp312",
+  //   "password": "bananas",
+  //   "firstName": "Kris",
+  //   "lastName": "Panahon",
+  //   "admin": false
+  // }
+
+  //   {
+  //   "username": "bball4lyf",
+  //   "password": "96bulls",
+  //   "firstName": "Michael",
+  //   "lastName": "Jordan",
+  //   "admin": false
+  // }
+
+  //   {
+  //   "username": "mscott",
+  //   "password": "dundermifflin",
+  //   "firstName": "Michael",
+  //   "lastName": "Scott",
+  //   "admin": true
+  // }
+
 userSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
