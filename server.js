@@ -68,30 +68,6 @@ app.get('/', (req, res) => {
   res.status(200).sendFile(__dirname + '/views/index.html');
 });
 
-app.put('/albums/:id/comments', authenticator, (req, res) => {
-  // push another comment onto album with ID with req.user.properties, content = params.content
-  // {
-  //   id
-  //   timestamp
-  //   username
-  //   content
-  // }
-
-  // will have to update the album schema
-
-  //   const whatever = Comment.create({ fdfsdfsf }).then(load the album and push your comment)
-
-  //       var childSchema = new Schema({ name: 'string' });
-
-  // var parentSchema = new Schema({
-  //   // Array of subdocuments
-  //   children: [childSchema],
-  //   // Single nested subdocuments. Caveat: single nested subdocs only work
-  //   // in mongoose >= 4.2.0
-  //   child: childSchema
-  // });
-});
-
 app.get('/albums/', (req, res) => {
   const newAlbum = {
     artist: req.query.artist,
@@ -136,7 +112,7 @@ app.put('/albums/:id/tags', authenticator, (req, res) => {
               return res.status(500).send('error');
             }
             Album
-              .findByIdAndUpdate({ _id: req.params.id }, { $push: { tags: req.body.tag } } )
+              .findByIdAndUpdate({ _id: req.params.id }, { $push: { tags: req.body.tag } })
               .then(() => {
                 return Album.findById(req.params.id);
               })
@@ -151,6 +127,28 @@ app.put('/albums/:id/tags', authenticator, (req, res) => {
     })
     .catch(err => {
       return res.status(500).json({ error: 'something went terribly wrong' });
+    });
+});
+
+app.put('/albums/:id/comments', authenticator, (req, res) => {
+  const today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ':' + today.getMinutes();
+  var dateTime = date+' '+time;
+
+  const addToComments = {
+    username: req.user.username,
+    content: req.body.content,
+    timestamp: dateTime
+  };
+
+  Album
+    .findByIdAndUpdate( { _id: req.params.id }, { $push: { comments: addToComments } }, { new: true } )
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch(err => {
+      return res.status(500).json('error');
     });
 });
 
@@ -254,7 +252,7 @@ app.delete('/albums/:name', authenticator, (req, res) => {
   }
 
   Album
-    .remove( { name: req.params.name } )
+    .remove({ name: req.params.name })
     .then(result => {
       res.status(204).json('successful delete');
     })

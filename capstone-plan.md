@@ -147,7 +147,8 @@ header for results
 
 ============== DONE AREA ==============
 
-album result styling
+color in header divs with proper width
+static width, not too wide
 comments, demonstrating 2 diff users
 dummy doc with comments
 github readme & other friday-morning-link stuff
