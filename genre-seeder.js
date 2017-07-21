@@ -4,7 +4,9 @@
 const seeder = require('mongoose-seed');
 const { Genre } = require('./models.js');
 
-seeder.connect('mongodb://localhost/album-discusser', function() {
+// mongodb://localhost/album-discusser
+
+seeder.connect('mongodb://dev:1@ds123371.mlab.com:23371/album-discusser', function() {
  
   // Load Mongoose models 
   seeder.loadModels(['models.js']);

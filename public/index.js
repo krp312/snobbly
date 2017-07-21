@@ -56,7 +56,7 @@ function albumSearcher() {
     source: function( request, response ) {
       let result;
       $.ajax({
-        url: 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&api_key=9cb98547379ad2c1b5b680646cbdac53&format=json',
+        url: 'https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&api_key=9cb98547379ad2c1b5b680646cbdac53&format=json',
         dataType: 'json',
         data: {
           artist: request.term
