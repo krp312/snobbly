@@ -115,7 +115,7 @@ function installSubmitButtonListener() {
         content: content
       }),
       success: function (data) {
-        $('#js-comment-submit-box').val('')
+        $('#js-comment-submit-box').val('');
         $('#js-album-search-button').trigger('click');
       }
     });
@@ -138,7 +138,7 @@ function renderAlbumHtml(data) {
 }
 
 function renderTagsView(data) {
-  return `<div><h3>tagged:</h3></div> ${createTagsList(data)}`
+  return `<div><h3>tagged:</h3></div> ${createTagsList(data)}`;
 }
 
 function createTagsList(data) {
@@ -151,7 +151,7 @@ function createTagsList(data) {
 }
 
 function renderCommentsHeader() {
- return `<div><h3>comments:</h3></div>`;
+  return `<div><h3>comments:</h3></div>`;
 }
 
 function renderCommentsView(data) {
@@ -165,17 +165,52 @@ function renderCommentsView(data) {
       </div>
     </div>
   </div>
-</div>`
+</div>`;
   });
 
   return comments;
 }
 
+$('#modal_trigger').leanModal({
+  top: 100,
+  overlay: 0.6,
+  closeButton: '.modal_close'
+});
 
+function signupButton() {
+  $('.btn').click(function () {
+    $('.user_register').show();
+    $('.header_title').text('Register');
+    return false;
+  });
+}
 
+function installSignupButtonListener() {
+  $('#js-signup-button').click(function() {
+    const username = $('#js-signup-username').val();
+    const password = $('#js-signup-password').val();
 
+    $.ajax({
+      url: '/users',
+      dataType: 'json',
+      method: 'POST',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({
+        username: username,
+        password: password
+      }),
+      success: function (data) {
+        console.log(data);
+        // $('#js-comment-submit-box').val('');
+        // $('#js-album-search-button').trigger('click');
+      }
+    });
+  });
+}
 
 $(function () {
+  signupButton();
+  installSignupButtonListener();
   installSubmitButtonListener();
   installSearchButtonListener();
   genreSelector();

@@ -172,39 +172,39 @@ app.get('/genres', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ message: 'No request body' });
-  }
+  // if (!req.body) {
+  //   return res.status(400).json({ message: 'No request body' });
+  // }
 
-  if (!('username' in req.body)) {
-    return res.status(422).json({ message: 'Missing field: username' });
-  }
+  // if (!('username' in req.body)) {
+  //   return res.status(422).json({ message: 'Missing field: username' });
+  // }
 
-  let { username, password, firstName, lastName, admin } = req.body;
+  // let { username, password, firstName, lastName, admin } = req.body;
 
-  if (typeof username !== 'string') {
-    return res.status(422).json({ message: 'Incorrect field type: username' });
-  }
+  // if (typeof username !== 'string') {
+  //   return res.status(422).json({ message: 'Incorrect field type: username' });
+  // }
 
-  username = username.trim();
+  // username = username.trim();
 
-  if (username === '') {
-    return res.status(422).json({ message: 'Incorrect field length: username' });
-  }
+  // if (username === '') {
+  //   return res.status(422).json({ message: 'Incorrect field length: username' });
+  // }
 
-  if (!(password)) {
-    return res.status(422).json({ message: 'Missing field: password' });
-  }
+  // if (!(password)) {
+  //   return res.status(422).json({ message: 'Missing field: password' });
+  // }
 
-  if (typeof password !== 'string') {
-    return res.status(422).json({ message: 'Incorrect field type: password' });
-  }
+  // if (typeof password !== 'string') {
+  //   return res.status(422).json({ message: 'Incorrect field type: password' });
+  // }
 
-  password = password.trim();
+  // password = password.trim();
 
-  if (password === '') {
-    return res.status(422).json({ message: 'Incorrect field length: password' });
-  }
+  // if (password === '') {
+  //   return res.status(422).json({ message: 'Incorrect field length: password' });
+  // }
 
   User
     .find({ username: req.body.username })
@@ -229,6 +229,8 @@ app.post('/users', (req, res) => {
       return res.status(201).send(user.apiRepr());
     })
     .catch(err => {
+      console.log(err)
+      console.log(err.stack)
       res.status(500).json({ message: 'Error!' });
     });
 });
