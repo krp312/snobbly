@@ -88,8 +88,8 @@ function installSearchButtonListener() {
       success: function (data) {
         data = data[0] || data;
         $('#js-album-view').show();
-        $('#js-album-searcher').val('');
         $('#genre-selector').show();
+        $('#comment-form').show();
         $('#js-album-header-view').html(renderAlbumHeaderView(data));
         $('#js-tags-view').html(renderTagsView(data));
         $('#js-comments-header').html(renderCommentsHeader);
@@ -122,18 +122,15 @@ function renderTagsView(data) {
 
 function createTagsList(data) {
   // data.tags is an array of strings where each tag is a string
-  console.log(data.tags)
   const tags = data.tags.map(function (tag) {
     return `<li class='tag'>${tag}</li>`;
   });
 
-  return tags;
+  return tags.join(' ');
 }
 
-
-
 function renderCommentsHeader() {
- return `<h3>comments:</h3>`;
+ return `<div><h3>comments:</h3></div>`;
 }
 
 function renderCommentsView(data) {

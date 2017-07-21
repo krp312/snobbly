@@ -143,14 +143,14 @@ reflections
 how to test the incorrect auth
 heroku transition
 start page styling
+header for results
 
 ============== DONE AREA ==============
 
 album result styling
-  header for results
+comments, demonstrating 2 diff users
 dummy doc with comments
 github readme & other friday-morning-link stuff
-comments, demonstrating 2 diff users
 admin view
 
 router

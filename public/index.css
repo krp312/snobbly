@@ -60,6 +60,10 @@ h1 {
   padding-top: 2em;
 }
 
+#comment-form {
+  padding-top: 2em;
+}
+
 .tag {
   background: #eee;
   border-radius: 3px 0 0 3px;
