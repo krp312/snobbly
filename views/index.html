@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="js/select2.min.js"></script>
+    <script src="index.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.css" rel="stylesheet">
     <link href="css/select2.min.css" rel="stylesheet" />
     <script type="text/javascript" src="jquery.leanModal.min.js"></script>
@@ -19,38 +20,38 @@
   </head>
   <body>
 
-<div>
-  <div id='banner'><h1>album discusser</h1></div>
-  <div id='signup-button'>
-                <div class="container">
+     <div>
+      <div id='banner'><h1>album discusser</h1></div>
+      <div id='signup-button'>
+          <div class="container">
             <a id="modal_trigger" href="#modal" class="btn">sign up!</a>
-            <div id="modal" class="popupContainer" style="display:none;">
-              <header class="popupHeader">
-                      <span class="header_title">Login</span>
-                      <span class="modal_close"><i class="fa fa-times"></i></span>
-              </header>
-              <section class="popupBody">
-                <div class="user_register">
-                  <form>
-                    <label>username</label>
-                    <input type="text" id='js-signup-username'/>
-                    <br />
+          <div id="modal" class="popupContainer" style="display:none;">
+            <header class="popupHeader">
+              <span class="header_title">Login</span>
+              <span class="modal_close"><i class="fa fa-times"></i></span>
+            </header>
+            <section class="popupBody">
+              <div class="user_register">
+                <form>
+                  <label>username</label>
+                  <input type="text" id='js-signup-username'/>
+                  <br />
 
-                    <label>password</label>
-                    <input type="password" id='js-signup-password' />
-                    <br />
+                  <label>password</label>
+                  <input type="password" id='js-signup-password' />
+                  <br />
 
-                    <div class="action_btns">
-                    <div class="one_half last"><a href="#" class="btn btn_red" id='js-signup-button'>sign me up!</a></div>
-                    <div id='js-signup-success' hidden><span>user successfully created</span></div>
-                    </div>
-                  </form>
-                </div>
-              </section>
-            </div>
+                  <div class="action_btns">
+                  <div class="one_half last"><a href="#" class="btn btn_red" id='js-signup-button'>sign me up!</a></div>
+                  <div id='js-signup-success' hidden><span>user successfully created</span></div>
+                  </div>
+                </form>
+              </div>
+            </section>
           </div>
-  </div>
-</div>
+        </div>
+      </div>
+    </div> 
 
     <div id='js-start-view'>
       <div id='album-searcher'>
@@ -73,20 +74,13 @@
           <button id='js-comment-submit-button'>submit comment</button>
         </div>        
       </div>
-
     </div>
 
     <div id='js-album-view' hidden>
-    <div id='js-album-header-view'></div>
-    <div id='js-comments-header'></div>
-    <div id='js-comments-view'></div>
-    <div id='js-tags-view'></div>
+      <div id='js-album-header-view'></div>
+      <div id='js-comments-header'></div>
+      <div id='js-comments-view'></div>
+      <div id='js-tags-view'></div>
     </div>
-
-    <script src="index.js"></script>
   </body>
 </html>
-
-
-
-<!-- only need to use file names when referring to js and css files because of how express is set up -->
