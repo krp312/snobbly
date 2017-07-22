@@ -62,8 +62,6 @@ let authenticator = passport.authenticate('basic', { session: false });
 // endpoints
 // ---------
 
-let validGenres = [];
-
 app.get('/', (req, res) => {
   res.status(200).sendFile(__dirname + '/views/index.html');
 });

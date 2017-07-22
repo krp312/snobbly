@@ -145,15 +145,15 @@ heroku transition
 start page styling
 header for results
 sign up pop up
+auth only for posting comments and updating tags
+dummy doc with comments
+comments, demonstrating 2 diff users
 
 ============== DONE AREA ==============
 understand front end code
 organize code so it can be presented
-auth only for posting comments
 color in header divs with proper width
 static width, not too wide
-comments, demonstrating 2 diff users
-dummy doc with comments
 github readme & other friday-morning-link stuff
 admin view
 router
