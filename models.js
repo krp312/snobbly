@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema(
     firstName: String,
     lastName: String,
     admin: {type: Boolean, required: true, default: false}
-  }
+  }    
 );
 
 userSchema.statics.hashPassword = function(password) {
