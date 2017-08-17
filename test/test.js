@@ -310,7 +310,7 @@ describe('', function () {
   describe('users DELETE', function () {
     it('should allow an admin to delete a user', function () {
       let randomUser;
-      return User    //     THE MOTHERFUCKNIG RETURN !!!!!
+      return User
         .findOne()
         .then(user => {
           randomUser = user;
@@ -318,7 +318,7 @@ describe('', function () {
         .then(() => {
           return chai.request(app)
             .delete(`/users/${randomUser.username}`)
-            .auth(ADMIN_USER.username, ADMIN_USER.unhashedPassword);  // UNHASHED PASSWORD!!!
+            .auth(ADMIN_USER.username, ADMIN_USER.unhashedPassword);
         })
         .then(deleteRequest => {
           deleteRequest.should.have.status(204);

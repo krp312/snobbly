@@ -12,7 +12,9 @@ const { Album, User, Genre } = require('./models');
 const app = express();
 
 app.use(express.static('public'));
-app.use(express.static('dist'));
+
+// dist isn't needed anymore 
+// app.use(express.static('dist'));
 
 app.use(morgan('common'));
 app.use(bodyParser.json());
@@ -62,11 +64,13 @@ let authenticator = passport.authenticate('basic', { session: false });
 // endpoints
 // ---------
 
-let validGenres = [];
-
-app.get('/', (req, res) => {
-  res.status(200).sendFile(__dirname + '/views/index.html');
-});
+// can be deleted
+// express makes browser look at public, index html is in there
+// browser always looks for 5 kinds of files, one of them is 
+// index.html
+// app.get('/', (req, res) => {
+//   res.status(200).sendFile(__dirname + '/views/index.html');
+// });
 
 app.get('/albums/', (req, res) => {
   const newAlbum = {
