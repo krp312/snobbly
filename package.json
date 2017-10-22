@@ -1,42 +1,42 @@
 {
-  "name": "backend-capstone-album-discusser",
-  "version": "1.0.0",
-  "description": "rate, tag and comment albums. thinkful backend capstone project.",
-  "main": "config.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "mocha",
-    "debug": "node --nolazy --debug-brk=5858 server.js",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/krp312/backend-capstone-album-discusser.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/krp312/backend-capstone-album-discusser/issues"
-  },
-  "homepage": "https://github.com/krp312/backend-capstone-album-discusser#readme",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.17.2",
-    "bower": "^1.8.0",
-    "cors": "^2.8.4",
-    "express": "^4.15.3",
-    "mongoose": "^4.11.3",
-    "mongoose-seed": "^0.3.2",
-    "morgan": "^1.8.2",
-    "passport": "^0.3.2",
-    "passport-http": "^0.3.0"
-  },
-  "devDependencies": {
-    "chai": "^4.1.0",
-    "chai-http": "^3.0.0",
-    "faker": "^4.1.0",
-    "mocha": "^3.4.2"
-  }
+    "name": "backend-capstone-album-discusser",
+    "version": "1.0.0",
+    "description": "rate, tag and comment albums. thinkful backend capstone project.",
+    "main": "config.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "mocha",
+        "debug": "node --nolazy --debug-brk=5858 server.js",
+        "start": "node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/krp312/backend-capstone-album-discusser.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/krp312/backend-capstone-album-discusser/issues"
+    },
+    "homepage": "https://github.com/krp312/backend-capstone-album-discusser#readme",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.17.2",
+        "bower": "^1.8.0",
+        "cors": "^2.8.4",
+        "express": "^4.15.3",
+        "mongoose": "^4.11.3",
+        "mongoose-seed": "^0.3.2",
+        "morgan": "^1.8.2",
+        "passport": "^0.3.2",
+        "passport-http": "^0.3.0"
+    },
+    "devDependencies": {
+        "chai": "^4.1.0",
+        "chai-http": "^3.0.0",
+        "faker": "^4.1.0",
+        "mocha": "^3.4.2"
+    }
 }
